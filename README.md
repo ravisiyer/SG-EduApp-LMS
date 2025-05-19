@@ -1,3 +1,6 @@
+Deleted git repo in lms folder and recreated a git repo. I added assets to .gitignore before making first commit. 
+To access assets visit older repo: https://github.com/ravisiyer/SG-EduApp-Ravi-LMS or SG tutorial repo.
+
 # Welcome to your Expo app 👋
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
