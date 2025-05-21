@@ -18,9 +18,11 @@ export default function HomeBlock({
 
   blockContent && console.log('blockContent', blockContent);
   return (
-    <Animated.View className="w-full pb-14" entering={FadeIn.duration(200).easing(Easing.ease)}>
-      <Image source={{ uri: getStrapiMedia(homeInfo?.image) }} className="w-full h-40" />
-      <View className="p-4">
+    // <Animated.View className="w-full pb-14" entering={FadeIn.duration(200).easing(Easing.ease)}>
+    <Animated.View className="w-screen pb-14" entering={FadeIn.duration(200).easing(Easing.ease)}>
+      <Image source={{ uri: getStrapiMedia(homeInfo?.image) }} className="w-screen h-40" />
+      {/* <Image source={{ uri: getStrapiMedia(homeInfo?.image) }} className="w-full h-40" /> */}
+      <View className="w-screen p-4">
         {blockContent && 
         <BlocksRenderer
           content={blockContent}
