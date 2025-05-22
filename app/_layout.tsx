@@ -38,15 +38,6 @@ export const unstable_settings = {
   initialRouteName: 'index',
 };
 
-function DebugColorScheme() {
-  const scheme = useColorScheme();
-  useEffect(() => {
-    console.log('Color scheme inside layout:', scheme);
-  }, [scheme]);
-
-  return null;
-}
-
 const InitialLayout = () => {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -98,7 +89,6 @@ export default function RootLayout() {
           <QueryClientProvider client={queryClient}>
             <StrapiProvider>
               <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                <DebugColorScheme />
                 <InitialLayout />
               </ThemeProvider>
             </StrapiProvider>

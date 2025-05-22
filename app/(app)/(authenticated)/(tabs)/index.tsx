@@ -6,9 +6,8 @@ import { Stack } from 'expo-router';
 import { useState } from 'react';
 
 export default function HomeScreen() {
-  // const colorScheme = useColorScheme(); // 'light' or 'dark'
   const colorScheme = useColorScheme() as 'light' | 'dark';
-  console.log('(tab)/index.tsx: colorScheme', colorScheme);
+  // console.log('(tab)/index.tsx: colorScheme', colorScheme);
   const { getHomeInfo } = useStrapi();
   const [isLoading, setIsLoading] = useState(Platform.OS === 'web' ? false : true);
 
@@ -30,8 +29,7 @@ export default function HomeScreen() {
         colorScheme={colorScheme}
         dom={{
           scrollEnabled: false,
-          matchContents: false,
-          // matchContents: true,
+          matchContents: true,
           onLoadEnd: () => {
             setIsLoading(false);
           },
