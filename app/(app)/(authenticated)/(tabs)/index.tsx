@@ -1,4 +1,4 @@
-import { View, ActivityIndicator, Platform } from 'react-native';
+import { View, ActivityIndicator, Platform, useColorScheme } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { useStrapi } from '@/providers/StrapiProvider';
 import HomeBlock from '@/components/HomeBlock';
@@ -6,6 +6,9 @@ import { Stack } from 'expo-router';
 import { useState } from 'react';
 
 export default function HomeScreen() {
+  // const colorScheme = useColorScheme(); // 'light' or 'dark'
+  const colorScheme = useColorScheme() as 'light' | 'dark';
+  console.log('(tab)/index.tsx: colorScheme', colorScheme);
   const { getHomeInfo } = useStrapi();
   const [isLoading, setIsLoading] = useState(Platform.OS === 'web' ? false : true);
 
@@ -24,9 +27,11 @@ export default function HomeScreen() {
       )}
       <HomeBlock
         homeInfo={data!}
+        colorScheme={colorScheme}
         dom={{
           scrollEnabled: false,
-          matchContents: true,
+          matchContents: false,
+          // matchContents: true,
           onLoadEnd: () => {
             setIsLoading(false);
           },

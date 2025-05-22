@@ -8,4 +8,19 @@
     --tertiary: #1d6976;
     --dark: #132134;
   }
-  
+
+/* https://github.com/PaulBratslavsky/strapi-block-renderer-test/blob/main/frontend/src/app/globals.css */
+
+p {
+  @apply mb-4;
+}
+
+h4 {
+  @apply text-xl mb-2;
+}
+
+@media (prefers-color-scheme: dark) {
+  p, h4 {
+    @apply text-white;
+  }
+}
