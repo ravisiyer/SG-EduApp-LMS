@@ -162,11 +162,14 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
       const result = await response.json();
+      const image = (__DEV__)
+       ? `${baseUrl}${result.data.image.url}`  // In Development
+       : `${result.data.image.url}`
+
       result.data = {
         ...result.data,
-        image: `${result.data.image.url}`,
+        image,
       };
       console.log('result.data', result.data);
       return result.data;
