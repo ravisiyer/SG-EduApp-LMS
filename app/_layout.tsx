@@ -14,6 +14,7 @@ import { StrapiProvider } from "@/providers/StrapiProvider";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useReactQueryDevTools } from '@dev-plugins/react-query';
+import { StatusBar } from 'expo-status-bar';
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 if (!publishableKey) {
@@ -89,6 +90,7 @@ export default function RootLayout() {
           <QueryClientProvider client={queryClient}>
             <StrapiProvider>
               <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
                 <InitialLayout />
               </ThemeProvider>
             </StrapiProvider>
