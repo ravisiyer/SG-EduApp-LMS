@@ -6,7 +6,6 @@ import '@/global.css';
 import { Link } from 'expo-router';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Animated, { FadeIn, Easing } from 'react-native-reanimated';
-// import { getStrapiMedia } from '@/lib/getStrapiMedia';
 
 export default function HomeBlock({
   homeInfo,
@@ -19,25 +18,11 @@ export default function HomeBlock({
   const blockContent = homeInfo?.content;
 
   // blockContent && console.log('blockContent', blockContent);
-  // console.log('In HomeBlock: colorScheme prop', colorScheme);
   return (
     <Animated.View className="w-screen pb-14" entering={FadeIn.duration(200).easing(Easing.ease)}>
       <Image source={{ uri: homeInfo?.image }} className="w-screen h-40" />
-      {/* <Image source={{ uri: getStrapiMedia(homeInfo?.image) }} className="w-screen h-40" /> */}
       <View className={`w-screen p-4 ${colorScheme === 'dark' ? 'text-white' : ''}`}>
-          {blockContent && 
-          <BlocksRenderer
-            content={blockContent}
-            // blocks={{
-            //   image: ({ image }) => (
-            //     <Image
-            //       source={{ uri: getStrapiMedia(image.url) }}
-            //       style={{ width: image.width ?? 300, height: image.height ?? 300 }}
-            //       resizeMode="cover"
-            //     />
-            //   ),
-            // }}
-          />}
+          {blockContent && <BlocksRenderer content={blockContent}/>}
       </View>
       <Link href="/courses" asChild>
         <TouchableOpacity className="bg-primary p-4 px-8 rounded-md mx-auto flex-row items-center justify-center gap-4">

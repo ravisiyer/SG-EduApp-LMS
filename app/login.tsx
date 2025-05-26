@@ -15,13 +15,11 @@ export default function Index() {
       const { createdSessionId, setActive, signUp } = await startSSOFlow({
         strategy,
       });
-      console.log('after startSSOFlow', createdSessionId, signUp);
-      // console.warn('after startSSOFlow', createdSessionId, signUp);
+      // console.log('after startSSOFlow', createdSessionId, signUp);
 
       // If sign in was successful, set the active session
       if (createdSessionId) {
-        console.log('sign in successful');
-        // console.warn('sign in successful');
+        // console.log('sign in successful');
         setActive!({ session: createdSessionId });
 
         const email = signUp?.emailAddress;
