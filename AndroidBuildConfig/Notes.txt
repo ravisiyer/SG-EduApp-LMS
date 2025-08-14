@@ -1,0 +1,31 @@
+Gradle and some other build tool versions that are relevant to AGP (Android Gradle Plugin) version, used in successful build on 13 Aug. 2025
+
+From android/gradle/wrapper/gradle-wrapper.properties:
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.10.2-all.zip
+----
+
+android/build.gradle does NOT have a plugin section that explicitly defines the AGP version. But, as per Gemini, the lines that are most relevant to determining the AGP version implicitly are:
+[In buildscript.dependencies block, AGP classpath] 
+	classpath('com.android.tools.build:gradle')
+	classpath('com.facebook.react:react-native-gradle-plugin')
+
+[In buildscript.ext block] 
+        compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '35')
+        kotlinVersion = findProperty('android.kotlinVersion') ?: '1.9.25'
+
+        ndkVersion = "26.1.10909125"
+----
+============================
+
+As per Gem, "the AGP version is almost certainly 8.6.0, as this is the version that aligns with Gradle 8.10.2 and a compileSdkVersion of 35".
+
+==========
+
+Above successful build config file copies in this directory:
+android-build.gradle file is a copy of android/build.gradle
+android-gradle-wrapper-gradle-wrapper.properties is a copy of android/gradle/wrapper/gradle-wrapper.properties
+
+==========
+
+On command for showing build output on console as well as saving it in a log file, Gem said:
+npx expo run:android 2>&1 | tee build_log.txt
