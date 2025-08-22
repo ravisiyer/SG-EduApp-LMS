@@ -1,4 +1,4 @@
-import { View, Text, Pressable, ActivityIndicator, useWindowDimensions } from 'react-native';
+import { View, Text, Pressable, ActivityIndicator, useWindowDimensions, useColorScheme } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { useQuery } from '@tanstack/react-query';
@@ -17,6 +17,7 @@ const HEADER_SCALE = 1.8; // Maximum scale for the parallax effect
 // import { Toaster, toast } from 'sonner';
 
 const Page = () => {
+  const colorScheme = useColorScheme() as 'light' | 'dark';
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const { getCourse, addUserToCourse, userHasCourse } = useStrapi();
   const { width: windowWidth } = useWindowDimensions();
@@ -154,7 +155,10 @@ const Page = () => {
         </Pressable>
 
         <View className="py-4">
-          <RichtTextContent blockContent={course.description} />
+          <RichtTextContent
+            colorScheme={colorScheme}
+            blockContent={course.description}
+          />
         </View>
 
         {/* Lessons Section */}
