@@ -4,9 +4,17 @@ import '@/global.css';
 import { View } from 'react-native';
 import { DOMProps } from 'expo/dom';
 
-const RichtTextContent = ({ blockContent }: { blockContent: BlocksContent; dom?: DOMProps }) => {
+const RichtTextContent = ({
+    blockContent,
+    colorScheme = 'light'
+  }: {
+    blockContent: BlocksContent;
+    colorScheme?: 'light' | 'dark';
+    dom?: DOMProps
+  }) => {
   return (
-    <View className="flex-1">
+    <View className={`flex-1 ${colorScheme === 'dark' ? 'bg-black text-white' : 'bg-white text-gray-800'}`}>
+    {/* <View className="flex-1"> */}
       <BlocksRenderer content={blockContent} />
     </View>
   );

@@ -1,4 +1,4 @@
-import { View, Text, Pressable, ActivityIndicator, useWindowDimensions, Alert, ScrollView } from 'react-native';
+import { View, Text, Pressable, ActivityIndicator, useWindowDimensions, Alert, ScrollView, useColorScheme } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { useQuery } from '@tanstack/react-query';
@@ -15,6 +15,7 @@ const HEADER_HEIGHT = 200; // Increased height for better parallax effect
 const HEADER_SCALE = 1.8; // Maximum scale for the parallax effect
 
 const Page = () => {
+  const colorScheme = useColorScheme() as 'light' | 'dark';
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const { getCourse, addUserToCourse, userHasCourse } = useStrapi();
   const { width: windowWidth } = useWindowDimensions();
@@ -146,6 +147,7 @@ const Page = () => {
         <View className="my-4">
           <RichtTextContent
             blockContent={course.description}
+            colorScheme={colorScheme}
             dom={{ matchContents: true, scrollEnabled: false }}
           />
         </View>
