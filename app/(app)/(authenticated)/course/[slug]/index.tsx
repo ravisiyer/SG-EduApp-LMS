@@ -1,4 +1,4 @@
-import { View, Text, Pressable, ActivityIndicator, useWindowDimensions, Alert } from 'react-native';
+import { View, Text, Pressable, ActivityIndicator, useWindowDimensions, Alert, ScrollView } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { useQuery } from '@tanstack/react-query';
@@ -104,7 +104,10 @@ const Page = () => {
 
   return (
     <Animated.ScrollView
-      className="flex-1 bg-white dark:bg-black"
+      className="bg-white dark:bg-black"
+      // Original code had flex-1 which is given below. As per Gemini, flex-1 for ScrollView results in a problem
+      // in Android (I was getting a blank screen). But iOS handles it.
+      // className="flex-1 bg-white dark:bg-black"
       onScroll={scrollHandler}
       scrollEventThrottle={16}
       contentContainerStyle={{ flexGrow: 1 }}>

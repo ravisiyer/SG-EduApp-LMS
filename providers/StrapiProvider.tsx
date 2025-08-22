@@ -93,9 +93,14 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
 
       const result = await response.json();
 
+      const image = (__DEV__)
+       ? `${baseUrl}${result.data[0].image.url}`  // In Development
+       : `${result.data[0].image.url}`
+
       result.data[0] = {
         ...result.data[0],
-        image: `${result.data[0].image.url}`,
+        image,
+        // image: `${result.data[0].image.url}`,
       };
       return result.data[0];
     } catch (error) {

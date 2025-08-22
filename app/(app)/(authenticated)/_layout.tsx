@@ -28,7 +28,7 @@ const Layout = () => {
           headerShown: Platform.OS === 'web' ? false : true,
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name="course/[slug]/index"
         options={{
           headerShown: true,
@@ -49,7 +49,7 @@ const Layout = () => {
           sheetInitialDetentIndex: 1,
           sheetAllowedDetents: [0.5, 1.0],
         }}
-      /> */}
+      />
       {/* <Stack.Screen
         name="course/[slug]/[lesson]"
         options={{
