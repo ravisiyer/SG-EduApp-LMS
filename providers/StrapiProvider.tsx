@@ -234,7 +234,10 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
 
       const result = await response.json();
       result.data.forEach((entry: any) => {
-        entry.course.image = `${entry.course.image.url}`;
+        entry.course.image = (__DEV__)
+        ? `${baseUrl}${entry.course.image.url}`  // In Development
+        : `${entry.course.image.url}`;
+        // entry.course.image = `${entry.course.image.url}`;
       });
       return result.data;
     } catch (error) {
