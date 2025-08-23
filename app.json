@@ -26,7 +26,12 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "origin": "https://fake-devonly-lms.expo.app"
+        }
+      ],
       [
         "expo-splash-screen",
         {

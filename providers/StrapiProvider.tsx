@@ -194,12 +194,14 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
   };
 
   const addUserToCourse = async (courseId: string): Promise<UserCourses> => {
+    console.log("Entered addUserToCourse with courseId:", courseId);
     try {
       const body = {
         courseId,
         clerkId: user?.id,
       };
 
+      console.log("In addUserToCourse before fetch call to /api/add-user-course with body:", body);
       const response = await fetch(`/api/add-user-course`, {
         method: 'POST',
         headers: {
@@ -215,6 +217,8 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
       const result = await response.json();
       return result;
     } catch (error) {
+      console.log("In addUserToCourse error handler with error:", error);
+      console.log(error)
       throw error;
     }
   };
