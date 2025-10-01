@@ -90,7 +90,6 @@ const Page = () => {
         // Below lines of code handle case of no web app in RevenueCat
         if (!productPackage) {
           toast('This course is not available for purchase on Web');
-          // console.log('This course is not available for purchase on Web');
           return;
         }
         const result = await purchaseWebPackage!(productPackage!);
@@ -110,6 +109,8 @@ const Page = () => {
                 action: {
                   label: 'Start Course',
                   onClick: () =>
+                  // Below line added and next line commented
+                  // to keep in sync with SG code
                     router.replace('/my-content'),
                     // router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
                 },
@@ -119,7 +120,7 @@ const Page = () => {
                 "addUserToCourse failed for course.documentId: ",
                 course.documentId.toString()
               );
-              toast.error("We couldn’t add this course to your account. Please contact support.");
+              toast.error("We could not add this course to your account. Please contact support.");
             }
           } else {
             console.error(
@@ -129,21 +130,6 @@ const Page = () => {
             toast.error("Purchase successful but course not unlocked. Please contact support.");
           }
         }
-        // if (
-        //   result &&
-        //   result.customerInfo.entitlements.active[productPackage.webBillingProduct.title]
-        // ) {
-        //   const result = await addUserToCourse(course.documentId.toString());
-        //   if (result) {
-        //     toast('Thanks for your purchase. You can now start the course!', {
-        //       action: {
-        //         label: 'Start Course',
-        //         onClick: () =>
-        //           router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
-        //       },
-        //     });
-        //   }
-        // }
       } else {
         // Free course, add user to course
         const result = await addUserToCourse(course.documentId.toString());
@@ -182,12 +168,6 @@ const Page = () => {
       <View className="flex-1 px-4 pt-4 bg-white dark:bg-black">
         <Text className="text-2xl font-bold text-gray-800 dark:text-white">{course.title}</Text>
 
-            {/* {hasCourse
-              ? 'Continue Course'
-              : course.isPremium
-              // ? `Purchase Course for ${productPackage?.webBillingProduct.currentPrice.formattedPrice}`
-              ? `Purchase Course for $9.99`
-              : 'Start Course'}  */}
         <Pressable
           onPress={onStartCourse}
           className="mt-4 bg-blue-500 rounded-lg py-3 items-center max-w-sm ">
@@ -199,7 +179,6 @@ const Page = () => {
                     course.isPremium
                       ? (
                           productPackage
-                            // ? `Purchase Course for ${productPackage?.product.priceString}`
                             ? `Purchase Course for ${productPackage?.webBillingProduct.price.formattedPrice}`
                             : `Purchase not available for web`
                         )

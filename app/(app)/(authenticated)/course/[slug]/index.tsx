@@ -144,14 +144,6 @@ const Page = () => {
           onPress={onStartCourse}
           className="mt-4 bg-blue-500 rounded-lg py-3 items-center">
           <Text className="text-white font-semibold text-lg">
-            {/* {hasCourse
-              ? 'Continue Course'
-              : course.isPremium
-              ? productPackage
-                ? `Purchase Course for ${productPackage?.product.priceString}`
-                : `Purchase Course not available for ${Platform.OS}`
-              // ? `Purchase Course for $9.99`
-              : 'Start Course'} */}
             {
               hasCourse
                 ? 'Continue Course'

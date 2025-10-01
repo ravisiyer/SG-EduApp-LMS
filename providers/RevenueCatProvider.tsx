@@ -49,9 +49,6 @@ export const RevenueCatProvider = ({ children }: any) => {
 
   // Load all offerings a user can (currently) purchase
   const loadOfferings = async () => {
-    // Below line of code is to handle case of no Android or iOS app in RevenueCat
-    // if (!isRevenueCatAPIKeyPresent) {return;}
-    // Above line is not needed as this method is called only by above useEffect which already checks for the key
     const offerings = await Purchases.getOfferings();
     if (offerings.current) {
       console.log('offerings', offerings.current);
