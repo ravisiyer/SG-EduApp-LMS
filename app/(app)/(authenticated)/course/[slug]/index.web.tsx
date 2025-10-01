@@ -94,6 +94,7 @@ const Page = () => {
           return;
         }
         const result = await purchaseWebPackage!(productPackage!);
+        console.log("result from purchaseWebPackage:",result);
         if (
           result &&
           result.customerInfo.entitlements.active[productPackage.webBillingProduct.title]
@@ -118,7 +119,7 @@ const Page = () => {
       }
     }
   };
-
+  console.log("productPackage:",productPackage)
   return (
     <Animated.ScrollView
       entering={FadeIn}
@@ -164,7 +165,8 @@ const Page = () => {
                     course.isPremium
                       ? (
                           productPackage
-                            ? `Purchase Course for ${productPackage?.product.priceString}`
+                            // ? `Purchase Course for ${productPackage?.product.priceString}`
+                            ? `Purchase Course for ${productPackage?.webBillingProduct.price.formattedPrice}`
                             : `Purchase not available for web`
                         )
                       : 'Start Course'

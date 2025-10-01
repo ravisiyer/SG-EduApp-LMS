@@ -36,7 +36,8 @@ export const RevenueCatProvider = ({ children }: any) => {
   // Load all offerings a user can (currently) purchase
   const loadOfferings = async () => {
     // Below line of code handles case of no web app in RevenueCat
-    if (!isRevenueCatAPIKeyPresent) {return;}
+    // if (!isRevenueCatAPIKeyPresent) {return;}
+    // Above line is not needed as this method is called only by above useEffect which already checks for the key
     const offerings = await Purchases.getSharedInstance().getOfferings();
     console.log('🚀 ~ loadOfferings ~ offerings:', offerings);
     if (offerings.current !== null && offerings.current.availablePackages.length !== 0) {
