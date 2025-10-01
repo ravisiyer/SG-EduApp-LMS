@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { useRevenueCat } from '@/providers/RevenueCatProvider';
 const HEADER_HEIGHT = 200; // Increased height for better parallax effect
 const HEADER_SCALE = 1.8; // Maximum scale for the parallax effect
-// import { Toaster, toast } from 'sonner';
+import { Toaster, toast } from 'sonner';
 
 const Page = () => {
   const colorScheme = useColorScheme() as 'light' | 'dark';
@@ -89,8 +89,8 @@ const Page = () => {
         // Premium course, needs to be purchased
         // Below lines of code handle case of no web app in RevenueCat
         if (!productPackage) {
-// Replace with toast or other message mechanism
-          console.log('This course is not available for purchase on Web');
+          toast('This course is not available for purchase on Web');
+          // console.log('This course is not available for purchase on Web');
           return;
         }
         const result = await purchaseWebPackage!(productPackage!);
@@ -100,14 +100,13 @@ const Page = () => {
         ) {
           const result = await addUserToCourse(course.documentId.toString());
           if (result) {
-// Need to fix sonner import issue
-            // toast('Thanks for your purchase. You can now start the course!', {
-            //   action: {
-            //     label: 'Start Course',
-            //     onClick: () =>
-            //       router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
-            //   },
-            // });
+            toast('Thanks for your purchase. You can now start the course!', {
+              action: {
+                label: 'Start Course',
+                onClick: () =>
+                  router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
+              },
+            });
           }
         }
       } else {
@@ -127,7 +126,7 @@ const Page = () => {
       onScroll={scrollHandler}
       scrollEventThrottle={16}
       contentContainerStyle={{ flexGrow: 1 }}>
-      {/* <Toaster position="top-right" /> */}
+      <Toaster position="top-right" />
 
       <View className="relative" style={{ height: HEADER_HEIGHT }}>
         <Animated.Image
