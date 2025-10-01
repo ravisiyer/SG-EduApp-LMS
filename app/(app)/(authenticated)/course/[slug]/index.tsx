@@ -1,4 +1,4 @@
-import { View, Text, Pressable, ActivityIndicator, useWindowDimensions, Alert, ScrollView, useColorScheme } from 'react-native';
+import { View, Text, Pressable, ActivityIndicator, useWindowDimensions, Alert, ScrollView, useColorScheme, Platform } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { useQuery } from '@tanstack/react-query';
@@ -81,11 +81,12 @@ const Page = () => {
       // router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
     } else {
       if (course.isPremium) {
+        // Below lines of code handle case of no Android or iOS app in RevenueCat
+        if (!productPackage) {
+          Alert.alert('Purchase not available', `This course is not available for purchase on ${Platform.OS}`);
+          return;
+        }
         const result = await purchasePackage!(productPackage!);
-        // Below two lines of code handle case of no Android or iOS app in RevenueCat
-        console.log("purchasePackage returned result: ", result);
-        if (!result) { return; }
-        
         if (result.productIdentifier === course.revenuecatId) {
           const result = await addUserToCourse(course.documentId.toString());
           if (result) {
@@ -143,12 +144,27 @@ const Page = () => {
           onPress={onStartCourse}
           className="mt-4 bg-blue-500 rounded-lg py-3 items-center">
           <Text className="text-white font-semibold text-lg">
-            {hasCourse
+            {/* {hasCourse
               ? 'Continue Course'
               : course.isPremium
-              ? `Purchase Course for ${productPackage?.product.priceString}`
+              ? productPackage
+                ? `Purchase Course for ${productPackage?.product.priceString}`
+                : `Purchase Course not available for ${Platform.OS}`
               // ? `Purchase Course for $9.99`
-              : 'Start Course'}
+              : 'Start Course'} */}
+            {
+              hasCourse
+                ? 'Continue Course'
+                : (
+                    course.isPremium
+                      ? (
+                          productPackage
+                            ? `Purchase Course for ${productPackage?.product.priceString}`
+                            : `Purchase not available for ${Platform.OS}`
+                        )
+                      : 'Start Course'
+                  )
+            }
           </Text>
         </Pressable>
 
