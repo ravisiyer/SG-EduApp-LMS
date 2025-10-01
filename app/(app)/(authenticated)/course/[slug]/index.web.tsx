@@ -95,21 +95,55 @@ const Page = () => {
         }
         const result = await purchaseWebPackage!(productPackage!);
         console.log("result from purchaseWebPackage:",result);
-        if (
-          result &&
-          result.customerInfo.entitlements.active[productPackage.webBillingProduct.title]
-        ) {
-          const result = await addUserToCourse(course.documentId.toString());
-          if (result) {
-            toast('Thanks for your purchase. You can now start the course!', {
-              action: {
-                label: 'Start Course',
-                onClick: () =>
-                  router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
-              },
-            });
+
+        const activeEntitlements = result?.customerInfo.entitlements.active;
+        if (activeEntitlements) {
+          const hasMatch = Object.values(activeEntitlements).some(
+            (activeEntitlement: any) =>
+              activeEntitlement.productIdentifier === productPackage.webBillingProduct.identifier
+          );
+
+          if (hasMatch) {
+            const addCourseResult = await addUserToCourse(course.documentId.toString());
+            if (addCourseResult) {
+              toast('Thanks for your purchase. You can now start the course!', {
+                action: {
+                  label: 'Start Course',
+                  onClick: () =>
+                    router.replace('/my-content'),
+                    // router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
+                },
+              });
+            } else {
+              console.error(
+                "addUserToCourse failed for course.documentId: ",
+                course.documentId.toString()
+              );
+              toast.error("We couldn’t add this course to your account. Please contact support.");
+            }
+          } else {
+            console.error(
+              "Purchase succeeded but no matching entitlement found for product:",
+              productPackage.webBillingProduct.identifier
+            );
+            toast.error("Purchase successful but course not unlocked. Please contact support.");
           }
         }
+        // if (
+        //   result &&
+        //   result.customerInfo.entitlements.active[productPackage.webBillingProduct.title]
+        // ) {
+        //   const result = await addUserToCourse(course.documentId.toString());
+        //   if (result) {
+        //     toast('Thanks for your purchase. You can now start the course!', {
+        //       action: {
+        //         label: 'Start Course',
+        //         onClick: () =>
+        //           router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
+        //       },
+        //     });
+        //   }
+        // }
       } else {
         // Free course, add user to course
         const result = await addUserToCourse(course.documentId.toString());
