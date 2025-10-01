@@ -17,6 +17,9 @@ export const RevenueCatProvider = ({ children }: any) => {
   const { user: clerkUser } = useUser();
 
   useEffect(() => {
+    // Below two lines of code handle case of no web app in RevenueCat
+    setIsReady(true);
+    return;
     const init = async () => {
       Purchases.configure(APIKeys.web, clerkUser!.id);
       setIsReady(true);
@@ -29,29 +32,35 @@ export const RevenueCatProvider = ({ children }: any) => {
 
   // Load all offerings a user can (currently) purchase
   const loadOfferings = async () => {
+    // Below line of code handles case of no web app in RevenueCat
+    return;
     const offerings = await Purchases.getSharedInstance().getOfferings();
     console.log('🚀 ~ loadOfferings ~ offerings:', offerings);
-    if (offerings.current !== null && offerings.current.availablePackages.length !== 0) {
-      console.log('offerings', offerings.current.availablePackages);
-      setWebPackages(offerings.current.availablePackages);
-    }
+    // Below lines of code commented to handle case of no web app in RevenueCat
+    // if (offerings.current !== null && offerings.current.availablePackages.length !== 0) {
+    //   console.log('offerings', offerings.current.availablePackages);
+    //   setWebPackages(offerings.current.availablePackages);
+    // }
   };
 
   // Purchase a package
   const purchaseWebPackage = async (pack: Package) => {
+    // Below line of code handles case of no web app in RevenueCat
+    return;
     try {
       return await Purchases.getSharedInstance().purchase({
         rcPackage: pack,
         customerEmail: clerkUser!.emailAddresses[0].emailAddress,
       });
     } catch (e) {
-      if (e instanceof PurchasesError && e.errorCode == ErrorCode.UserCancelledError) {
-        // User cancelled the purchase process, don't do anything
-      } else {
-        // Handle errors
-        console.log('error', e);
-        throw e;
-      }
+      // Below lines of code commented to handle case of no web app in RevenueCat
+      // if (e instanceof PurchasesError && e.errorCode == ErrorCode.UserCancelledError) {
+      //   // User cancelled the purchase process, don't do anything
+      // } else {
+      //   // Handle errors
+      //   console.log('error', e);
+      //   throw e;
+      // }
     }
   };
 

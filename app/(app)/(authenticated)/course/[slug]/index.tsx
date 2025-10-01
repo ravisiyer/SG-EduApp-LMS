@@ -82,7 +82,10 @@ const Page = () => {
     } else {
       if (course.isPremium) {
         const result = await purchasePackage!(productPackage!);
-
+        // Below two lines of code handle case of no Android or iOS app in RevenueCat
+        console.log("purchasePackage returned result: ", result);
+        if (!result) { return; }
+        
         if (result.productIdentifier === course.revenuecatId) {
           const result = await addUserToCourse(course.documentId.toString());
           if (result) {

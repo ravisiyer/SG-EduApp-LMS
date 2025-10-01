@@ -17,6 +17,9 @@ export const RevenueCatProvider = ({ children }: any) => {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    // Below two lines of code handle case of no Android or iOS app in RevenueCat
+    setIsReady(true);
+    return;
     const init = async () => {
       if (Platform.OS === 'android') {
         await Purchases.configure({ apiKey: APIKeys.google });
@@ -36,15 +39,20 @@ export const RevenueCatProvider = ({ children }: any) => {
 
   // Load all offerings a user can (currently) purchase
   const loadOfferings = async () => {
+    // Below line of code is to handle case of no Android or iOS app in RevenueCat
+    return;
     const offerings = await Purchases.getOfferings();
     if (offerings.current) {
       console.log('offerings', offerings.current);
-      setPackages(offerings.current.availablePackages);
+      // Below line of code is to handle case of no Android or iOS app in RevenueCat
+      // setPackages(offerings.current.availablePackages);
     }
   };
 
   // Purchase a package
   const purchasePackage = async (pack: PurchasesPackage) => {
+    // Below line of code is to handle case of no Android or iOS app in RevenueCat
+    return;
     try {
       return await Purchases.purchasePackage(pack);
     } catch (e: any) {
@@ -57,6 +65,8 @@ export const RevenueCatProvider = ({ children }: any) => {
 
   // // Restore previous purchases
   const restorePermissions = async () => {
+    // Below line of code is to handle case of no Android or iOS app in RevenueCat
+    return;
     const customer = await Purchases.restorePurchases();
     return customer;
   };
