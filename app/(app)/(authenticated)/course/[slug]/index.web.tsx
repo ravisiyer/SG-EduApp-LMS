@@ -11,7 +11,7 @@ import Animated, {
   FadeIn,
 } from 'react-native-reanimated';
 import { useState } from 'react';
-// import { useRevenueCat } from '@/providers/RevenueCatProvider';
+import { useRevenueCat } from '@/providers/RevenueCatProvider';
 const HEADER_HEIGHT = 200; // Increased height for better parallax effect
 const HEADER_SCALE = 1.8; // Maximum scale for the parallax effect
 // import { Toaster, toast } from 'sonner';
@@ -23,16 +23,16 @@ const Page = () => {
   const { width: windowWidth } = useWindowDimensions();
   const scrollY = useSharedValue(0);
   const [hasCourse, setHasCourse] = useState(false);
-  // const { webPackages, purchaseWebPackage } = useRevenueCat();
+  const { webPackages, purchaseWebPackage } = useRevenueCat();
 
   const { data: course, isLoading } = useQuery({
     queryKey: ['course', slug],
     queryFn: () => getCourse(slug),
   });
 
-  // const productPackage = webPackages?.find(
-  //   (pkg) => pkg.webBillingProduct.identifier === course?.revenuecatId
-  // );
+  const productPackage = webPackages?.find(
+    (pkg) => pkg.webBillingProduct.identifier === course?.revenuecatId
+  );
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -80,29 +80,36 @@ const Page = () => {
   }
 
   const onStartCourse = async () => {
+    console.log("Entered onStartCourse");
     if (hasCourse) {
       // User already has course access, redirect to overview page
       // router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
     } else {
       if (course.isPremium) {
         // Premium course, needs to be purchased
-        // const result = await purchaseWebPackage!(productPackage!);
-
-        // if (
-        //   result &&
-        //   result.customerInfo.entitlements.active[productPackage.webBillingProduct.title]
-        // ) {
-        //   const result = await addUserToCourse(course.documentId.toString());
-        //   if (result) {
-        //     toast('Thanks for your purchase. You can now start the course!', {
-        //       action: {
-        //         label: 'Start Course',
-        //         onClick: () =>
-        //           router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
-        //       },
-        //     });
-        //   }
-        // }
+        // Below lines of code handle case of no web app in RevenueCat
+        if (!productPackage) {
+// Replace with toast or other message mechanism
+          console.log('This course is not available for purchase on Web');
+          return;
+        }
+        const result = await purchaseWebPackage!(productPackage!);
+        if (
+          result &&
+          result.customerInfo.entitlements.active[productPackage.webBillingProduct.title]
+        ) {
+          const result = await addUserToCourse(course.documentId.toString());
+          if (result) {
+// Need to fix sonner import issue
+            // toast('Thanks for your purchase. You can now start the course!', {
+            //   action: {
+            //     label: 'Start Course',
+            //     onClick: () =>
+            //       router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
+            //   },
+            // });
+          }
+        }
       } else {
         // Free course, add user to course
         const result = await addUserToCourse(course.documentId.toString());
@@ -141,16 +148,29 @@ const Page = () => {
       <View className="flex-1 px-4 pt-4 bg-white dark:bg-black">
         <Text className="text-2xl font-bold text-gray-800 dark:text-white">{course.title}</Text>
 
-        <Pressable
-          onPress={onStartCourse}
-          className="mt-4 bg-blue-500 rounded-lg py-3 items-center max-w-sm ">
-          <Text className="text-white font-semibold text-lg">
-            {hasCourse
+            {/* {hasCourse
               ? 'Continue Course'
               : course.isPremium
               // ? `Purchase Course for ${productPackage?.webBillingProduct.currentPrice.formattedPrice}`
               ? `Purchase Course for $9.99`
-              : 'Start Course'}
+              : 'Start Course'}  */}
+        <Pressable
+          onPress={onStartCourse}
+          className="mt-4 bg-blue-500 rounded-lg py-3 items-center max-w-sm ">
+          <Text className="text-white font-semibold text-lg">
+            {
+              hasCourse
+                ? 'Continue Course'
+                : (
+                    course.isPremium
+                      ? (
+                          productPackage
+                            ? `Purchase Course for ${productPackage?.product.priceString}`
+                            : `Purchase not available for web`
+                        )
+                      : 'Start Course'
+                  )
+            }
           </Text>
         </Pressable>
 
