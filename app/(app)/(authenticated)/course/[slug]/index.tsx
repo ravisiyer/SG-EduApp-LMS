@@ -10,7 +10,7 @@ import Animated, {
   interpolate,
 } from 'react-native-reanimated';
 import { useState } from 'react';
-// import { useRevenueCat } from '@/providers/RevenueCatProvider';
+import { useRevenueCat } from '@/providers/RevenueCatProvider';
 const HEADER_HEIGHT = 200; // Increased height for better parallax effect
 const HEADER_SCALE = 1.8; // Maximum scale for the parallax effect
 
@@ -21,14 +21,14 @@ const Page = () => {
   const { width: windowWidth } = useWindowDimensions();
   const scrollY = useSharedValue(0);
   const [hasCourse, setHasCourse] = useState(false);
-  // const { packages, purchasePackage } = useRevenueCat();
+  const { packages, purchasePackage } = useRevenueCat();
 
   const { data: course, isLoading } = useQuery({
     queryKey: ['course', slug],
     queryFn: () => getCourse(slug),
   });
 
-  // const productPackage = packages?.find((pkg) => pkg.product.identifier === course?.revenuecatId);
+  const productPackage = packages?.find((pkg) => pkg.product.identifier === course?.revenuecatId);
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -81,20 +81,24 @@ const Page = () => {
       // router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
     } else {
       if (course.isPremium) {
-        // const result = await purchasePackage!(productPackage!);
+        const result = await purchasePackage!(productPackage!);
 
-        // if (result.productIdentifier === course.revenuecatId) {
-        //   const result = await addUserToCourse(course.documentId.toString());
-        //   if (result) {
-        //     Alert.alert('Course purchased', 'You can now start the course', [
-        //       {
-        //         text: 'Start now',
-        //         onPress: () =>
-        //           router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
-        //       },
-        //     ]);
-        //   }
-        // }
+        if (result.productIdentifier === course.revenuecatId) {
+          const result = await addUserToCourse(course.documentId.toString());
+          if (result) {
+            Alert.alert('Course purchased', 'You can now start the course', [
+              {
+                text: 'Start now',
+                onPress: () =>
+                  // Below line added and next line commented
+                  // to keep in sync with SG Video at https://youtu.be/fO3D8lNs10c?t=11285
+                  // SG video encloses this part in curly braces
+                  router.replace('/my-content'),
+                  // router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
+              },
+            ]);
+          }
+        }
       } else {
         const result = await addUserToCourse(course.documentId.toString());
         if (result) {
@@ -139,8 +143,8 @@ const Page = () => {
             {hasCourse
               ? 'Continue Course'
               : course.isPremium
-              // ? `Purchase Course for ${productPackage?.product.priceString}`
-              ? `Purchase Course for $9.99`
+              ? `Purchase Course for ${productPackage?.product.priceString}`
+              // ? `Purchase Course for $9.99`
               : 'Start Course'}
           </Text>
         </Pressable>

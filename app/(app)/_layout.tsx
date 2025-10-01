@@ -1,6 +1,6 @@
 import { Redirect, Slot, useSegments } from 'expo-router';
 import { useAuth } from '@clerk/clerk-expo';
-// import { RevenueCatProvider } from '@/providers/RevenueCatProvider';
+import { RevenueCatProvider } from '@/providers/RevenueCatProvider';
 
 const Layout = () => {
   const { isSignedIn } = useAuth();
@@ -13,9 +13,9 @@ const Layout = () => {
   }
 
   return (
-    // <RevenueCatProvider>
+    <RevenueCatProvider>
       <Slot />
-    // </RevenueCatProvider>
+    </RevenueCatProvider>
   );
 };
 
