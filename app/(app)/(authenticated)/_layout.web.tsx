@@ -7,30 +7,36 @@ function AppHeader() {
   const activeTab = pathname.split('/')[0];
 
   return (
-    <View className="flex-row items-center justify-between p-4 border-b border-gray-200 bg-white">
+    <View className="flex-row items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
       <View className="flex-row items-center gap-8">
-        <Link href="/" className="text-primary font-bold text-xl">
+        <Link href="/" className="font-bold text-xl text-primary dark:text-white">
           <Text>My Studio</Text>
         </Link>
         <Link
           href="/courses"
-          className={`text-gray-600 hover:text-primary ${
-            activeTab === 'courses' ? 'text-primary' : ''
+          className={`hover:text-primary ${
+            activeTab === 'courses'
+              ? 'text-primary'
+              : 'text-gray-600 dark:text-gray-300'
           }`}>
           <Text>Browse Courses</Text>
         </Link>
         <Link
           href="/my-content"
-          className={`text-gray-600 hover:text-primary ${
-            activeTab === 'my-content' ? 'text-primary' : ''
+          className={`hover:text-primary ${
+            activeTab === 'my-content'
+              ? 'text-primary'
+              : 'text-gray-600 dark:text-gray-300'
           }`}>
           <Text>My Courses</Text>
         </Link>
       </View>
       <Link
         href="/profile"
-        className={`text-gray-600 hover:text-primary ${
-          activeTab === 'profile' ? 'text-primary' : ''
+        className={`hover:text-primary ${
+          activeTab === 'profile'
+            ? 'text-primary'
+            : 'text-gray-600 dark:text-gray-300'
         }`}>
         <Text>Profile</Text>
       </Link>

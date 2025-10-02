@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, Platform, useColorScheme } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
 // import { useVideoPlayer, VideoView } from 'expo-video';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRef } from 'react';
 
 const Page = () => {
+  const colorScheme = useColorScheme() as 'light' | 'dark';
   const { slug, lesson: lessonIndex } = useLocalSearchParams<{ slug: string; lesson: string }>();
   const { getLessonForCourse, markLessonAsCompleted, getLessonsForCourse } = useStrapi();
   // const player = useVideoPlayer(null);
@@ -95,7 +96,10 @@ const Page = () => {
       /> */}
 
       <View className="flex-1 p-4 min-h-[100px]">
-        <RichtTextContent blockContent={lesson.notes} />
+        <RichtTextContent 
+          colorScheme={colorScheme}
+          blockContent={lesson.notes} 
+        />
       </View>
       {hasNextLesson && (
         <TouchableOpacity
