@@ -50,12 +50,12 @@ const Layout = () => {
           sheetAllowedDetents: [0.5, 1.0],
         }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name="course/[slug]/[lesson]"
         options={{
           headerShown: false,
         }}
-      /> */}
+      />
     </Stack>
   );
 };

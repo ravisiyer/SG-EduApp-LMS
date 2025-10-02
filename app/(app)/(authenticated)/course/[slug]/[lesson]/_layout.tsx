@@ -81,12 +81,12 @@ const Layout = () => {
         name="overview"
         options={{
           title: 'Course Overview',
-          drawerIcon: () => (
-            <Ionicons name="book-outline" />
-          ),
-          // drawerIcon: ({ color, size }) => (
-          //   <Ionicons name="book-outline" size={size} color={color} />
+          // drawerIcon: () => (
+          //   <Ionicons name="book-outline" />
           // ),
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="book-outline" size={size} color={color} />
+          ),
         }}
       />
       <Drawer.Screen
