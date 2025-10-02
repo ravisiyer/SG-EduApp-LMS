@@ -1,7 +1,7 @@
 import { Drawer } from 'expo-router/drawer';
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { router, usePathname } from 'expo-router';
-import { Image, View, Text, TouchableOpacity, Platform, useWindowDimensions } from 'react-native';
+import { Image, View, Text, TouchableOpacity, Platform, useWindowDimensions, useColorScheme  } from 'react-native';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ function CustomDrawerContent(props: any) {
   const { getLessonsForCourse } = useStrapi();
   const { slug } = useLocalSearchParams();
   const pathname = usePathname();
+  const colorScheme = useColorScheme();
 
   const { data: lessons } = useQuery({
     queryKey: ['lessons', slug],
@@ -19,7 +20,9 @@ function CustomDrawerContent(props: any) {
   });
 
   if (!lessons) {
-    return <Text>Loading...</Text>;
+    return <Text className="text-black dark:text-white">Loading...</Text>;
+    // return <Text style={{ color: colorScheme === 'dark' ? '#fff' : '#000' }}>Loading...</Text>;
+    // return <Text>Loading...</Text>;
   }
 
   return (
@@ -31,7 +34,8 @@ function CustomDrawerContent(props: any) {
       />
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
-        <Text className="text-2xl font-bold p-4">Lessons</Text>
+        <Text className="text-2xl font-bold p-4 text-black dark:text-white" >Lessons</Text>
+        {/* <Text className="text-2xl font-bold p-4" style={{ color: colorScheme === 'dark' ? '#fff' : '#000' }}>Lessons</Text> */}
         {lessons.map((lesson) => {
           const isActive = pathname === `/course/${slug}/${lesson.lesson_index}`;
           return (
@@ -53,8 +57,9 @@ function CustomDrawerContent(props: any) {
         <TouchableOpacity
           onPress={() => router.replace(`/my-content`)}
           className="flex-row items-center gap-2 p-4 pt-12">
-          <Ionicons name="arrow-back" size={24} color="black" />
-          <Text className="text-sm">Back to my Content</Text>
+          <Ionicons name="arrow-back" size={24} color={colorScheme === 'dark' ? '#fff' : '#000'} />
+          <Text className="text-sm text-black dark:text-white">Back to my Content</Text>
+          {/* <Text className="text-sm" style={{ color: colorScheme === 'dark' ? '#fff' : '#000' }}>Back to my Content</Text> */}
         </TouchableOpacity>
       </DrawerContentScrollView>
 
@@ -75,7 +80,8 @@ const Layout = () => {
       screenOptions={{
         drawerActiveTintColor: '#0d6c9a',
         drawerType: dimensions.width > 768 ? 'permanent' : 'front',
-        headerShown: Platform.OS === 'web' ? false : true,
+        headerShown: dimensions.width > 768 ? false : true,
+        // headerShown: Platform.OS === 'web' ? false : true,
       }}>
       <Drawer.Screen
         name="overview"
