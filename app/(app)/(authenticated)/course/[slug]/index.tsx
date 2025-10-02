@@ -78,7 +78,7 @@ const Page = () => {
   const onStartCourse = async () => {
     console.log("Entered onStartCourse");
     if (hasCourse) {
-      // router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
+      router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
     } else {
       if (course.isPremium) {
         // Below lines of code handle case of no Android or iOS app in RevenueCat
@@ -97,8 +97,8 @@ const Page = () => {
                   // Below line added and next line commented
                   // to keep in sync with SG Video at https://youtu.be/fO3D8lNs10c?t=11285
                   // SG video encloses this part in curly braces
-                  router.replace('/my-content'),
-                  // router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
+                  // router.replace('/my-content'),
+                  router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
               },
             ]);
           }

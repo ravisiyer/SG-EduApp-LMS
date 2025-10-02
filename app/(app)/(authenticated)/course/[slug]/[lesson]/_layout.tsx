@@ -1,5 +1,5 @@
-// import { Drawer } from 'expo-router/drawer';
-// import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import { Drawer } from 'expo-router/drawer';
+import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { router, usePathname } from 'expo-router';
 import { Image, View, Text, TouchableOpacity, Platform, useWindowDimensions } from 'react-native';
 import { useStrapi } from '@/providers/StrapiProvider';
@@ -29,7 +29,7 @@ function CustomDrawerContent(props: any) {
         style={{ width: 200, height: 100, alignSelf: 'center' }}
         resizeMode="contain"
       />
-      {/* <DrawerContentScrollView {...props}>
+      <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
         <Text className="text-2xl font-bold p-4">Lessons</Text>
         {lessons.map((lesson) => {
@@ -56,7 +56,7 @@ function CustomDrawerContent(props: any) {
           <Ionicons name="arrow-back" size={24} color="black" />
           <Text className="text-sm">Back to my Content</Text>
         </TouchableOpacity>
-      </DrawerContentScrollView> */}
+      </DrawerContentScrollView>
 
       <View className="border-t border-gray-200 pt-4  items-center">
         <Text className="text-sm text-gray-500">Copyright Simon 2025</Text>
@@ -69,35 +69,35 @@ const Layout = () => {
   const dimensions = useWindowDimensions();
 
   return (
-    <View><Text>Placeholder for Drawer</Text></View>
-    // <Drawer
-    //   drawerContent={CustomDrawerContent}
-    //   screenOptions={{
-    //     drawerActiveTintColor: '#0d6c9a',
-    //     drawerType: dimensions.width > 768 ? 'permanent' : 'front',
-    //     headerShown: Platform.OS === 'web' ? false : true,
-    //   }}>
-    //   <Drawer.Screen
-    //     name="overview"
-    //     options={{
-    //       title: 'Course Overview',
-    //       drawerIcon: () => (
-    //         <Ionicons name="book-outline" />
-    //       ),
-    //       // drawerIcon: ({ color, size }) => (
-    //       //   <Ionicons name="book-outline" size={size} color={color} />
-    //       // ),
-    //     }}
-    //   />
-    //   <Drawer.Screen
-    //     name="index"
-    //     options={{
-    //       drawerItemStyle: {
-    //         display: 'none',
-    //       },
-    //     }}
-    //   />
-    // </Drawer>
+    // <View><Text>Placeholder for Drawer</Text></View>
+    <Drawer
+      drawerContent={CustomDrawerContent}
+      screenOptions={{
+        drawerActiveTintColor: '#0d6c9a',
+        drawerType: dimensions.width > 768 ? 'permanent' : 'front',
+        headerShown: Platform.OS === 'web' ? false : true,
+      }}>
+      <Drawer.Screen
+        name="overview"
+        options={{
+          title: 'Course Overview',
+          drawerIcon: () => (
+            <Ionicons name="book-outline" />
+          ),
+          // drawerIcon: ({ color, size }) => (
+          //   <Ionicons name="book-outline" size={size} color={color} />
+          // ),
+        }}
+      />
+      <Drawer.Screen
+        name="index"
+        options={{
+          drawerItemStyle: {
+            display: 'none',
+          },
+        }}
+      />
+    </Drawer>
   );
 };
 export default Layout;

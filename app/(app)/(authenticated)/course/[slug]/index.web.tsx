@@ -83,7 +83,7 @@ const Page = () => {
     console.log("Entered onStartCourse");
     if (hasCourse) {
       // User already has course access, redirect to overview page
-      // router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
+      router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
     } else {
       if (course.isPremium) {
         // Premium course, needs to be purchased
@@ -111,8 +111,8 @@ const Page = () => {
                   onClick: () =>
                   // Below line added and next line commented
                   // to keep in sync with SG code
-                    router.replace('/my-content'),
-                    // router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
+                    // router.replace('/my-content'),
+                    router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
                 },
               });
             } else {
