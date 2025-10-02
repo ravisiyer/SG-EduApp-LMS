@@ -1,26 +1,26 @@
 import { View, Text, TouchableOpacity, ActivityIndicator, Platform, useColorScheme } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
-// import { useVideoPlayer, VideoView } from 'expo-video';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useStrapi } from '@/providers/StrapiProvider';
 import RichtTextContent from '@/components/RichtTextContent';
 import { useEventListener } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
-// import { Confetti, ConfettiMethods } from 'react-native-fast-confetti';
+import { Confetti, ConfettiMethods } from 'react-native-fast-confetti';
 import { useRef } from 'react';
 
 const Page = () => {
   const colorScheme = useColorScheme() as 'light' | 'dark';
   const { slug, lesson: lessonIndex } = useLocalSearchParams<{ slug: string; lesson: string }>();
   const { getLessonForCourse, markLessonAsCompleted, getLessonsForCourse } = useStrapi();
-  // const player = useVideoPlayer(null);
+  const player = useVideoPlayer(null);
   const router = useRouter();
   const queryClient = useQueryClient();
-  // const confettiRef = useRef<ConfettiMethods>(null);
+  const confettiRef = useRef<ConfettiMethods>(null);
 
-  // useEventListener(player, 'playToEnd', () => {
-  //   onHandleCompleteLesson();
-  // });
+  useEventListener(player, 'playToEnd', () => {
+    onHandleCompleteLesson();
+  });
 
   const { data: lesson, isLoading: lessonLoading } = useQuery({
     queryKey: ['lesson', slug, lessonIndex],
@@ -42,7 +42,7 @@ const Page = () => {
 
   const hasNextLesson = lessons?.find((l) => l.lesson_index === parseInt(lessonIndex) + 1);
 
-  // player.replace(lesson.video);
+  player.replace(lesson.video);
 
   // Automatically play the video in production
   // if (!__DEV__) {
@@ -61,11 +61,11 @@ const Page = () => {
 
     queryClient.invalidateQueries({ queryKey: ['lessons', slug] });
     queryClient.invalidateQueries({ queryKey: ['userCourses'] });
-    // router.push(`/course/${slug}/${parseInt(lessonIndex) + 1}`);
+    router.push(`/course/${slug}/${parseInt(lessonIndex) + 1}`);
   };
 
   const onEndCourse = () => {
-    // confettiRef.current?.restart();
+    confettiRef.current?.restart();
     markLessonAsCompleted(lesson.documentId, lesson.course.documentId, 100);
     queryClient.invalidateQueries({ queryKey: ['lessons', slug] });
 
@@ -76,7 +76,7 @@ const Page = () => {
 
   return (
     <View className="flex-1">
-      {/* {Platform.OS !== 'web' && (
+      {Platform.OS !== 'web' && (
         <Confetti
           ref={confettiRef}
           autoplay={false}
@@ -84,16 +84,16 @@ const Page = () => {
           verticalSpacing={20}
           fadeOutOnEnd
         />
-      )} */}
+      )}
 
       <Stack.Screen options={{ title: lesson?.name || '' }} />
-      {/* <VideoView
+      <VideoView
         player={player}
         allowsFullscreen
         allowsPictureInPicture
         style={{ width: '100%', height: Platform.OS === 'web' ? '40%' : '30%' }}
         contentFit="contain"
-      /> */}
+      />
 
       <View className="flex-1 p-4 min-h-[100px]">
         <RichtTextContent 

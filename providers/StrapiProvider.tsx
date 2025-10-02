@@ -144,7 +144,11 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
       }
 
       const result = await response.json();
-      result.data[0].video = `${result.data[0].video.url}`;
+      result.data[0].video = (__DEV__)
+       ? `${baseUrl}${result.data[0].video.url}`  // In Development
+       : `${result.data[0].video.url}`
+      // result.data[0].video = `${result.data[0].video.url}`;
+
       return result.data[0];
     } catch (error) {
       console.error('Error fetching lessons for course:', error);
