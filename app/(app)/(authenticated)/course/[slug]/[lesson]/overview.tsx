@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator, useWindowDimensions, TouchableOpacity } from 'react-native';
+import { View, Text, ActivityIndicator, useWindowDimensions, TouchableOpacity, useColorScheme } from 'react-native';
 import { router, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { useQuery } from '@tanstack/react-query';
@@ -16,6 +16,7 @@ const HEADER_HEIGHT = 200;
 const HEADER_SCALE = 1.8;
 
 const Page = () => {
+  const colorScheme = useColorScheme() as 'light' | 'dark';
   const { slug } = useGlobalSearchParams<{ slug: string }>();
   const { getCourse } = useStrapi();
   const { width: windowWidth } = useWindowDimensions();
@@ -94,7 +95,10 @@ const Page = () => {
       <View className="px-4 pt-4 bg-white dark:bg-black flex-1">
         <Text className="text-2xl font-bold text-gray-800 dark:text-white">{course.title}</Text>
         <View className="flex-1 py-4 min-h-[100px]">
-          <RichtTextContent blockContent={course.description} />
+          <RichtTextContent 
+            colorScheme={colorScheme}
+            blockContent={course.description} 
+          />
         </View>
       </View>
 
