@@ -108,7 +108,8 @@ if (!validLessonIndex) {
 
     setTimeout(() => {
       router.replace(`/my-content`);
-    }, 4000);
+    }, Platform.OS === "web" ? 0 : 4000);
+    // }, 4000);
   };
 
   const hasNotes =
