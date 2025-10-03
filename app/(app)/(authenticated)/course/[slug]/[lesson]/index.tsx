@@ -18,10 +18,6 @@ const Page = () => {
   const queryClient = useQueryClient();
   const confettiRef = useRef<ConfettiMethods>(null);
 
-  useEventListener(player, 'playToEnd', () => {
-    onHandleCompleteLesson();
-  });
-
   const { data: lesson, isLoading: lessonLoading } = useQuery({
     queryKey: ['lesson', slug, lessonIndex],
     queryFn: () => getLessonForCourse(slug, parseInt(lessonIndex)),
@@ -32,24 +28,8 @@ const Page = () => {
     queryFn: () => getLessonsForCourse(slug as string),
   });
 
-  if (!lesson) {
-    return (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator color="#0d6c9a" />
-      </View>
-    );
-  }
-
-  const hasNextLesson = lessons?.find((l) => l.lesson_index === parseInt(lessonIndex) + 1);
-
-  player.replace(lesson.video);
-
-  // Automatically play the video in production
-  // if (!__DEV__) {
-  //   player.play();
-  // }
-
   const onHandleCompleteLesson = () => {
+    if (!lesson) return; // <- guard for TypeScript
     const progress = Math.floor((parseInt(lessonIndex) / (lessons?.length || 0)) * 100);
 
     markLessonAsCompleted(
@@ -63,6 +43,31 @@ const Page = () => {
     queryClient.invalidateQueries({ queryKey: ['userCourses'] });
     router.push(`/course/${slug}/${parseInt(lessonIndex) + 1}`);
   };
+
+  useEventListener(player, 'playToEnd', () => {
+    onHandleCompleteLesson();
+  });
+
+  if (!lesson) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator color="#0d6c9a" />
+      </View>
+    );
+  }
+
+  const hasNextLesson = lessons?.find((l) => l.lesson_index === parseInt(lessonIndex) + 1);
+
+  if (lesson?.video) {
+    player.replace(lesson.video);
+  }
+
+  // player.replace(lesson.video);
+
+  // Automatically play the video in production
+  // if (!__DEV__) {
+  //   player.play();
+  // }
 
   const onEndCourse = () => {
     confettiRef.current?.restart();
