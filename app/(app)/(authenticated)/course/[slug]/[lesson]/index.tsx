@@ -18,14 +18,19 @@ const Page = () => {
   const queryClient = useQueryClient();
   const confettiRef = useRef<ConfettiMethods>(null);
 
+const { data: lessons, isLoading: lessonsLoading } = useQuery({
+  queryKey: ['lessons', slug],
+  queryFn: () => getLessonsForCourse(slug as string),
+});
+
+  const validLessonIndex = lessons?.some(
+    l => l.lesson_index === parseInt(lessonIndex)
+  );
+
   const { data: lesson, isLoading: lessonLoading } = useQuery({
     queryKey: ['lesson', slug, lessonIndex],
     queryFn: () => getLessonForCourse(slug, parseInt(lessonIndex)),
-  });
-
-  const { data: lessons } = useQuery({
-    queryKey: ['lessons', slug],
-    queryFn: () => getLessonsForCourse(slug as string),
+    enabled: !!validLessonIndex, // only fetch if index is valid
   });
 
   const onHandleCompleteLesson = () => {
@@ -47,6 +52,31 @@ const Page = () => {
   useEventListener(player, 'playToEnd', () => {
     onHandleCompleteLesson();
   });
+
+  // Rendering
+  if (lessonsLoading) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator color="#0d6c9a" />
+      </View>
+    );
+  }
+
+if (!validLessonIndex) {
+  return (
+    <View
+      className={`flex-1 items-center justify-center ${
+        colorScheme === 'dark' ? 'bg-black' : 'bg-white'
+      }`}
+    >
+      <Text
+        className={colorScheme === 'dark' ? 'text-white' : 'text-gray-800'}
+      >
+        Lesson not found
+      </Text>
+    </View>
+  );
+}
 
   if (!lesson) {
     return (
@@ -79,6 +109,15 @@ const Page = () => {
     }, 4000);
   };
 
+  const hasNotes =
+    lesson.notes &&
+    Array.isArray(lesson.notes) &&
+    lesson.notes.length > 0;
+
+  if (!hasNotes) {
+    console.log("Lesson notes are missing or empty for lesson:", lesson.documentId);
+  }
+
   return (
     <View className="flex-1">
       {Platform.OS !== 'web' && (
@@ -100,11 +139,23 @@ const Page = () => {
         contentFit="contain"
       />
 
-      <View className="flex-1 p-4 min-h-[100px]">
+      {/* <View className="flex-1 p-4 min-h-[100px]">
         <RichtTextContent 
           colorScheme={colorScheme}
           blockContent={lesson.notes} 
         />
+      </View> */}
+      <View className="flex-1 p-4 min-h-[100px]">
+        {hasNotes ? (
+          <RichtTextContent 
+            colorScheme={colorScheme}
+            blockContent={lesson.notes} 
+          />
+        ) : (
+          <Text className="text-center text-gray-500 dark:text-gray-400">
+            No notes available for this lesson.
+          </Text>
+        )}
       </View>
       {hasNextLesson && (
         <TouchableOpacity

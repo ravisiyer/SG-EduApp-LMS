@@ -144,6 +144,10 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
       }
 
       const result = await response.json();
+      if (!result.data[0]) {
+        throw new Error(`No lesson found for slug "${slug}" and lessonIndex ${lessonIndex}`);
+      }
+
       result.data[0].video = (__DEV__)
        ? `${baseUrl}${result.data[0].video.url}`  // In Development
        : `${result.data[0].video.url}`
