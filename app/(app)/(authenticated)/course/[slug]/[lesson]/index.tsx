@@ -18,14 +18,16 @@ const Page = () => {
   const queryClient = useQueryClient();
   const confettiRef = useRef<ConfettiMethods>(null);
 
-const { data: lessons, isLoading: lessonsLoading } = useQuery({
-  queryKey: ['lessons', slug],
-  queryFn: () => getLessonsForCourse(slug as string),
-});
+  const { data: lessons, isLoading: lessonsLoading } = useQuery({
+    queryKey: ['lessons', slug],
+    queryFn: () => getLessonsForCourse(slug as string),
+  });
 
   const validLessonIndex = lessons?.some(
     l => l.lesson_index === parseInt(lessonIndex)
   );
+
+  const hasNextLesson = lessons?.find((l) => l.lesson_index === parseInt(lessonIndex) + 1);
 
   const { data: lesson, isLoading: lessonLoading } = useQuery({
     queryKey: ['lesson', slug, lessonIndex],
@@ -46,7 +48,9 @@ const { data: lessons, isLoading: lessonsLoading } = useQuery({
 
     queryClient.invalidateQueries({ queryKey: ['lessons', slug] });
     queryClient.invalidateQueries({ queryKey: ['userCourses'] });
-    router.push(`/course/${slug}/${parseInt(lessonIndex) + 1}`);
+    // If there isn't a next lesson, simply stay on same lesson. This is a bug fix.
+    // If required, later a better UI can be considered.
+    if (hasNextLesson) {router.push(`/course/${slug}/${parseInt(lessonIndex) + 1}`);}
   };
 
   useEventListener(player, 'playToEnd', () => {
@@ -85,8 +89,6 @@ if (!validLessonIndex) {
       </View>
     );
   }
-
-  const hasNextLesson = lessons?.find((l) => l.lesson_index === parseInt(lessonIndex) + 1);
 
   if (lesson?.video) {
     player.replace(lesson.video);
