@@ -58,8 +58,12 @@ const Page = () => {
     const index = parseInt(lessonIndex);
     const progress = Math.floor(((index - 1)/ (lessons?.length || 0)) * 100);
 
-    updateUserCourseProgress(lesson.course.documentId, progress, index, true);
-    queryClient.invalidateQueries({ queryKey: ['userCourses'] });
+    // updateUserCourseProgress(lesson.course.documentId, progress, index, true);
+    // queryClient.invalidateQueries({ queryKey: ['userCourses'] });
+    (async () => {
+      await updateUserCourseProgress(lesson.course.documentId, progress, index, true);
+      await queryClient.invalidateQueries({ queryKey: ['userCourses'] });
+    })();    
   }, [lesson, lessons, lessonIndex, queryClient]);
 
   const onHandleCompleteLesson = () => {

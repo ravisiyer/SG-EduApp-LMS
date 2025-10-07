@@ -309,6 +309,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
     nextLessonIndex?: number,
     mapToUserCourse = false
   ) => {
+    console.log("Entered updateUserCourseProgress with:", { courseId, progress, nextLessonIndex, mapToUserCourse });
     let userCourseId = courseId;
 
     if (mapToUserCourse) {
@@ -320,6 +321,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
           return;
         }
         userCourseId = uc.documentId;
+        console.log("Mapped courseId to userCourseId:", userCourseId);
       } catch (err) {
         console.error("Failed to map courseId to userCourseId:", err);
         return;

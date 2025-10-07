@@ -11,6 +11,7 @@ export default function HomeScreen() {
   const { data } = useQuery({
     queryKey: ['userCourses'],
     queryFn: () => getUserCourses(),
+    // refetchOnMount: 'always', // Band-aid fix but now not needed as underlying race condition issue is fixed.
   });
 
   return (
