@@ -7,7 +7,7 @@ import RichtTextContent from '@/components/RichtTextContent';
 import { useEventListener } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import { Confetti, ConfettiMethods } from 'react-native-fast-confetti';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const Page = () => {
   const colorScheme = useColorScheme() as 'light' | 'dark';
@@ -17,6 +17,14 @@ const Page = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const confettiRef = useRef<ConfettiMethods>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    // Give the player a short time to settle before we start reacting to events
+    const timer = setTimeout(() => setIsMounted(true), 500);
+    return () => clearTimeout(timer);
+    // setIsMounted(true)
+  }, []);
 
   const { data: lessons, isLoading: lessonsLoading } = useQuery({
     queryKey: ['lessons', slug],
@@ -36,9 +44,16 @@ const Page = () => {
   });
 
   const onHandleCompleteLesson = () => {
+    console.log("Entered onHandleCompleteLesson");
     if (!lesson) return; // <- guard for TypeScript
     const progress = Math.floor((parseInt(lessonIndex) / (lessons?.length || 0)) * 100);
 
+    console.log("Invoking markLessonAsCompleted with:", {
+      lessonId: lesson.documentId,
+      courseId: lesson.course.documentId,
+      progress,
+      nextLessonIndex: parseInt(lessonIndex) + 1
+    });
     markLessonAsCompleted(
       lesson.documentId,
       lesson.course.documentId,
@@ -54,6 +69,11 @@ const Page = () => {
   };
 
   useEventListener(player, 'playToEnd', () => {
+    if (!isMounted) {
+      console.log('Ignoring spurious playToEnd event during mount');
+      return;
+    }
+    console.log("isMounted is true in playToEnd event handler. Will now invoke onHandleCompleteLesson.");
     onHandleCompleteLesson();
   });
 
