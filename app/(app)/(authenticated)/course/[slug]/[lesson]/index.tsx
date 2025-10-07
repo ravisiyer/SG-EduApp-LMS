@@ -21,9 +21,11 @@ const Page = () => {
 
   useEffect(() => {
     // Give the player a short time to settle before we start reacting to events
+    // A better approach might be to listen for a "ready" event from the player.
+    // But I don't want to invest time in figuring out the exact code to do that now.
+    // This workaround is good enough for the tutorial code, IMHO, as of now at least.
     const timer = setTimeout(() => setIsMounted(true), 500);
     return () => clearTimeout(timer);
-    // setIsMounted(true)
   }, []);
 
   const { data: lessons, isLoading: lessonsLoading } = useQuery({
@@ -70,7 +72,7 @@ const Page = () => {
 
   useEventListener(player, 'playToEnd', () => {
     if (!isMounted) {
-      console.log('Ignoring spurious playToEnd event during mount');
+      console.log('In playToEnd event handler. Ignoring spurious playToEnd event during mount');
       return;
     }
     console.log("isMounted is true in playToEnd event handler. Will now invoke onHandleCompleteLesson.");
