@@ -12,12 +12,13 @@ import { useEffect, useRef, useState } from 'react';
 const Page = () => {
   const colorScheme = useColorScheme() as 'light' | 'dark';
   const { slug, lesson: lessonIndex } = useLocalSearchParams<{ slug: string; lesson: string }>();
-  const { getLessonForCourse, markLessonAsCompleted, getLessonsForCourse } = useStrapi();
+  const { getLessonForCourse, markLessonAsCompleted, getLessonsForCourse, updateUserCourseProgress } = useStrapi();
   const player = useVideoPlayer(null);
   const router = useRouter();
   const queryClient = useQueryClient();
   const confettiRef = useRef<ConfettiMethods>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const externalNavigationRef  = useRef(true);
 
   useEffect(() => {
     // Give the player a short time to settle before we start reacting to events
@@ -45,6 +46,22 @@ const Page = () => {
     enabled: !!validLessonIndex, // only fetch if index is valid
   });
 
+  useEffect(() => {
+    if (!lesson || !lessons) return;
+
+    console.log("In useEffect for updating course progress. externalNavigationRef.current =", externalNavigationRef .current);
+    // Only update when navigation is external (not from local router.push)
+    if (!externalNavigationRef .current) {
+      externalNavigationRef .current = true;
+      return;
+    }    
+    const index = parseInt(lessonIndex);
+    const progress = Math.floor(((index - 1)/ (lessons?.length || 0)) * 100);
+
+    updateUserCourseProgress(lesson.course.documentId, progress, index, true);
+    queryClient.invalidateQueries({ queryKey: ['userCourses'] });
+  }, [lesson, lessons, lessonIndex, queryClient]);
+
   const onHandleCompleteLesson = () => {
     console.log("Entered onHandleCompleteLesson");
     if (!lesson) return; // <- guard for TypeScript
@@ -65,9 +82,14 @@ const Page = () => {
 
     queryClient.invalidateQueries({ queryKey: ['lessons', slug] });
     queryClient.invalidateQueries({ queryKey: ['userCourses'] });
+
     // If there isn't a next lesson, simply stay on same lesson. This is a bug fix.
     // If required, later a better UI can be considered.
-    if (hasNextLesson) {router.push(`/course/${slug}/${parseInt(lessonIndex) + 1}`);}
+    if (hasNextLesson) {
+      // mark that the next navigation is internal
+      externalNavigationRef .current = false;
+      router.push(`/course/${slug}/${parseInt(lessonIndex) + 1}`);
+    }
   };
 
   useEventListener(player, 'playToEnd', () => {

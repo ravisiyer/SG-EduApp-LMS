@@ -20,6 +20,12 @@ interface StrapiContextType {
     progress: number,
     nextLessonIndex?: number
   ) => Promise<void>;
+  updateUserCourseProgress: (
+    courseId: string,
+    progress: number,
+    nextLessonIndex?: number,
+    mapToUserCourse?: boolean  // optional, defaults to false
+  ) => Promise<void>;      
   getUserCompletedLessons: () => Promise<number>;
 }
 
@@ -300,10 +306,28 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
   const updateUserCourseProgress = async (
     courseId: string,
     progress: number,
-    nextLessonIndex?: number
+    nextLessonIndex?: number,
+    mapToUserCourse = false
   ) => {
+    let userCourseId = courseId;
+
+    if (mapToUserCourse) {
+      try {
+        const userCourses = await getUserCourses();
+        const uc = userCourses.find((uc) => uc.course.documentId === courseId);
+        if (!uc) {
+          console.warn("No userCourse found for courseId:", courseId);
+          return;
+        }
+        userCourseId = uc.documentId;
+      } catch (err) {
+        console.error("Failed to map courseId to userCourseId:", err);
+        return;
+      }
+    }
+
     try {
-      const response = await fetch(`${baseUrl}/api/user-courses/${courseId}`, {
+      const response = await fetch(`${baseUrl}/api/user-courses/${userCourseId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -360,6 +384,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
     getCourse,
     userHasCourse,
     markLessonAsCompleted,
+    updateUserCourseProgress,    
     getUserCompletedLessons,
   };
 
