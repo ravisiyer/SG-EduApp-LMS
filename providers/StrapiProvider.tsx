@@ -288,16 +288,18 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+      await response.body?.cancel(); // discard body efficiently      
 
       // Also update user-course with progress and lesson_index
       const userCourse = await getUserCourses();
       const userCourseToUpdate = userCourse.find((course) => course.course.documentId === courseId);
       if (userCourseToUpdate) {
-        updateUserCourseProgress(userCourseToUpdate.documentId, progress, nextLessonIndex);
+        await updateUserCourseProgress(userCourseToUpdate.documentId, progress, nextLessonIndex);
       }
-      queryClient.invalidateQueries({ queryKey: ['userCourses'] });
+      await queryClient.invalidateQueries({ queryKey: ['userCourses'] });
 
-      return response.json();
+      return;
+      // return response.json();
     } catch (error) {
       throw error;
     }
