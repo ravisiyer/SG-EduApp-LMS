@@ -227,7 +227,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      queryClient.invalidateQueries({ queryKey: ['userCourses'] });
+      await queryClient.invalidateQueries({ queryKey: ['userCourses'] });
       const result = await response.json();
       return result;
     } catch (error) {
@@ -348,7 +348,8 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      return response.json();
+      await response.body?.cancel(); // discard body efficiently      
+      // return response.json();
     } catch (error) {
       throw error;
     }

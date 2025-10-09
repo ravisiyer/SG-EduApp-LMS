@@ -58,8 +58,6 @@ const Page = () => {
     const index = parseInt(lessonIndex);
     const progress = Math.floor(((index - 1)/ (lessons?.length || 0)) * 100);
 
-    // updateUserCourseProgress(lesson.course.documentId, progress, index, true);
-    // queryClient.invalidateQueries({ queryKey: ['userCourses'] });
     (async () => {
       await updateUserCourseProgress(lesson.course.documentId, progress, index, true);
       await queryClient.invalidateQueries({ queryKey: ['userCourses'] });
@@ -77,15 +75,17 @@ const Page = () => {
       progress,
       nextLessonIndex: parseInt(lessonIndex) + 1
     });
-    markLessonAsCompleted(
-      lesson.documentId,
-      lesson.course.documentId,
-      progress,
-      parseInt(lessonIndex) + 1
-    );
+    (async () => {
+      await markLessonAsCompleted(
+        lesson.documentId,
+        lesson.course.documentId,
+        progress,
+        parseInt(lessonIndex) + 1
+      );
 
-    queryClient.invalidateQueries({ queryKey: ['lessons', slug] });
-    queryClient.invalidateQueries({ queryKey: ['userCourses'] });
+      await queryClient.invalidateQueries({ queryKey: ['lessons', slug] });
+      await queryClient.invalidateQueries({ queryKey: ['userCourses'] });
+    })();    
 
     // If there isn't a next lesson, simply stay on same lesson. This is a bug fix.
     // If required, later a better UI can be considered.
@@ -151,8 +151,10 @@ if (!validLessonIndex) {
 
   const onEndCourse = () => {
     confettiRef.current?.restart();
-    markLessonAsCompleted(lesson.documentId, lesson.course.documentId, 100);
-    queryClient.invalidateQueries({ queryKey: ['lessons', slug] });
+    (async () => {
+      await markLessonAsCompleted(lesson.documentId, lesson.course.documentId, 100);
+      await queryClient.invalidateQueries({ queryKey: ['lessons', slug] });
+    })();    
 
     setTimeout(() => {
       router.replace(`/my-content`);
