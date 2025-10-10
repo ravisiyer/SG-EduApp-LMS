@@ -45,7 +45,7 @@ const Page = () => {
           </View>
         </View>
 
-        <View className="mb-6">
+        {/* <View className="mb-6">
           <Text className="text-xl font-bold mb-4">Recent Activity</Text>
           <View className="space-y-4">
             <View className="flex-row items-center p-4 bg-gray-50 rounded-lg">
@@ -78,7 +78,7 @@ const Page = () => {
               </View>
             </View>
           </View>
-        </View>
+        </View> */}
 
         <Button title="Sign Out" onPress={() => signOut()} color="#FF3B30" />
       </ScrollView>
