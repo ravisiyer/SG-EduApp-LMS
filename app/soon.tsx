@@ -1,51 +1,73 @@
 import React from 'react';
-import { View, Text, Platform, Button, Alert, Linking } from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  Alert,
+  BackHandler,
+  useColorScheme,
+} from 'react-native';
+import * as Linking from 'expo-linking';
 import '@/global.css';
 
-// Web-only import outside the main component
-let WaitlistComponent: React.ComponentType<any> | null = null;
-if (Platform.OS === 'web') {
-  try {
-    // only import on web
-    const { Waitlist } = require('@clerk/clerk-react');
-    WaitlistComponent = Waitlist;
-  } catch (e) {
-    console.warn('Waitlist not available', e);
-  }
-}
+export default function SoonNative() {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+  const webSoonUrl = process.env.EXPO_PUBLIC_WEB_SOON_URL;
 
-const Page = () => {
-  const handleMobileWaitlist = () => {
+  const handleJoinWeb = () => {
+    if (!webSoonUrl) {
+      Alert.alert(
+        'Waitlist unavailable',
+        'The web waitlist URL is not configured. Please try again later.'
+      );
+      return;
+    }
+
     Alert.alert(
       'Join the waitlist',
-      'Sign ups are currently unavailable on mobile. Please visit our web waitlist to join.',
+      'Sign-ups are currently unavailable on mobile.\n\nWould you like to open the web waitlist?',
       [
-        { text: 'Open Web', onPress: () => Linking.openURL('http://10.50.171.151:8081/soon') },
+        {
+          text: 'Open Web Waitlist',
+          onPress: () => Linking.openURL(webSoonUrl),
+        },
         { text: 'Cancel', style: 'cancel' },
       ]
     );
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 16, backgroundColor: Platform.OS === 'web' ? undefined : 'white' }}>
-      <Text style={{ fontSize: 32, fontWeight: 'bold', textAlign: 'center', marginBottom: 8 }}>
+    <View
+      className={`flex-1 items-center justify-center px-6 ${
+        isDark ? 'bg-black' : 'bg-white'
+      }`}
+    >
+      <Text
+        className={`text-2xl font-bold text-center mb-4 ${
+          isDark ? 'text-white' : 'text-black'
+        }`}
+      >
         We're not yet open to the public
       </Text>
-      <Text style={{ fontSize: 14, color: 'gray', textAlign: 'center', marginBottom: 20 }}>
-        Please join the waitlist to get early access to the app
+
+      <Text
+        className={`text-base text-center mb-8 ${
+          isDark ? 'text-gray-300' : 'text-gray-600'
+        }`}
+      >
+        Please join the waitlist using our website.
       </Text>
 
-      {Platform.OS === 'web' && WaitlistComponent ? (
-        <WaitlistComponent
-          appearance={{ variables: { colorPrimary: '#0d6c9a' } }}
-          afterJoinWaitlistUrl="/wait"
-          signInUrl="/login"
-        />
-      ) : (
-        <Button title="Join Waitlist" onPress={handleMobileWaitlist} />
+      {webSoonUrl && (
+        <View className="w-full max-w-sm">
+          <Button title="Join Waitlist (opens web)" onPress={handleJoinWeb} />
+        </View>
       )}
+
+      <View className="w-full max-w-sm mt-4">
+        <Button title="Exit App" color="#999" onPress={() => BackHandler.exitApp()} />
+      </View>
     </View>
   );
-};
-
-export default Page;
+}
