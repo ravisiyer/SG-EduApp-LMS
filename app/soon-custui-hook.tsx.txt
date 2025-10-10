@@ -1,0 +1,102 @@
+This version was provided by ChatGPT.
+With this version:
+The waitlist form is shown correctly both on web and mobile with your soon.tsx code. Add a user on web waitlist goes through with entry appearing in waitlist on clerk dashboard. But adding on Android app, shows an error: "Sign ups are currently unavailable Join the waitlist ...". Pressing OK does not add an entry to clerk dashboard waitlist.
+---
+Key part of ChatGPT response to above:
+3️⃣ Clerk’s official recommendation
+
+From Clerk docs:
+
+“This component can be used in Expo Web projects, but it isn’t available in native environments (iOS or Android). For native apps, build a custom UI using Clerk hooks.”
+
+The custom UI does not automatically add users to the waitlist — you have to implement a backend endpoint that sends the email to your own waitlist table.
+
+Native users cannot be automatically queued on Clerk dashboard.
+--- end of ChatGPT response ---
+
+I am saving it as a text file which I will commit and perhaps delete later, as if I do want to look at backend endpoint, some of this code may be useful.
+======================
+'use client';
+import React, { useState } from 'react';
+import { View, Text, ActivityIndicator, TextInput, Button, Alert, Platform } from 'react-native';
+import '@/global.css';
+import { useSignUp } from '@clerk/clerk-expo';
+import { useRouter } from 'expo-router';
+
+let WaitlistComponent: React.ComponentType<any> | null = null;
+
+if (Platform.OS === 'web') {
+  // Web-only Waitlist
+  const { Waitlist } = require('@clerk/clerk-react');
+  WaitlistComponent = Waitlist;
+}
+
+const Page = () => {
+  const router = useRouter();
+
+  // Mobile native state
+  // const { signUp, setSession, isLoaded } = useSignUp();
+  const { signUp, isLoaded } = useSignUp();
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleNativeWaitlist = async () => {
+    if (!email) return Alert.alert('Please enter your email');
+    if (!signUp) return;
+
+    try {
+      setLoading(true);
+      // Create a new sign up attempt (waitlist)
+      await signUp.create({ emailAddress: email });
+      Alert.alert('Success', 'You have joined the waitlist!');
+      router.push('/wait'); // redirect to wait page
+    } catch (err: any) {
+      console.error(err);
+      Alert.alert('Error', err?.message || 'Failed to join waitlist');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <View className="flex-1 items-center justify-center bg-white dark:bg-black p-4">
+      <View className="mb-10 justify-center items-center">
+        <Text className="text-4xl font-bold text-center">
+          We're not yet open to the public
+        </Text>
+        <Text className="text-sm text-gray-500 text-center mt-2">
+          Please join the waitlist to get early access to the app
+        </Text>
+      </View>
+
+      {Platform.OS === 'web' && WaitlistComponent ? (
+        <WaitlistComponent
+          appearance={{ variables: { colorPrimary: '#0d6c9a' } }}
+          afterJoinWaitlistUrl="/wait"
+          signInUrl="/login"
+          fallback={<ActivityIndicator />}
+        />
+      ) : (
+        // Mobile native waitlist form
+        <View className="w-full max-w-md">
+          <TextInput
+            placeholder="Enter your email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            className="border border-gray-300 rounded px-4 py-2 mb-4 text-black dark:text-white"
+          />
+          <Button
+            title={loading ? 'Joining...' : 'Join Waitlist'}
+            onPress={handleNativeWaitlist}
+            disabled={loading || !isLoaded || !signUp}
+          />
+          {loading && <ActivityIndicator className="mt-2" />}
+        </View>
+      )}
+    </View>
+  );
+};
+
+export default Page;
