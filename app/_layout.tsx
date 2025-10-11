@@ -1,11 +1,8 @@
 import "@/global.css"
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-// import { ClerkProvider } from '@clerk/clerk-expo'
 import { ClerkProvider, ClerkLoaded, useAuth } from '@clerk/clerk-expo';
 import { tokenCache } from '@clerk/clerk-expo/token-cache'
-// import { Slot, Stack } from 'expo-router'
 import { Stack, useRouter, useSegments } from 'expo-router';
-// import { ActivityIndicator, LogBox } from "react-native";
 import { ActivityIndicator, LogBox, useColorScheme } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
@@ -49,15 +46,12 @@ const InitialLayout = () => {
   useReactQueryDevTools(queryClient);
 
   useEffect(() => {
-    console.log("Main _layout: First useEffect", { loaded, isLoaded });  
     if (loaded && isLoaded) {
       SplashScreen.hideAsync();
-      // router.replace("/soon");      
     }
   }, [loaded, isLoaded]);
 
   useEffect(() => {
-    console.log("Main _layout: Second useEffect", { isLoaded, isSignedIn, loaded });  
     if (!loaded) return;
 
     const inAuthGroup = segments[1] === '(authenticated)';
@@ -88,7 +82,6 @@ export default function RootLayout() {
     <ClerkProvider
       tokenCache={tokenCache}
       publishableKey={publishableKey}
-      // waitlistUrl="http://localhost:8081/soon"
       waitlistUrl="/soon"
       >
       <GestureHandlerRootView style={{ flex: 1 }}>

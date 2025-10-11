@@ -1,5 +1,5 @@
-// app/soon.web.tsx
-'use client';
+// 'use client'; // Seems to be optional; I commented it out to keep it in sync with other files in project
+//                // No other file in project has it.
 import { View, ActivityIndicator, Text, useColorScheme } from 'react-native';
 import { Waitlist } from '@clerk/clerk-react';
 import '@/global.css';

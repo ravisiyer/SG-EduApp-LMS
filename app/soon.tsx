@@ -74,7 +74,6 @@ export default function SoonNative() {
         </Pressable>
       )}
 
-      {/* Inline “Already have access? Sign in” section */}
       <View className="flex-row items-center justify-center mb-8">
         <Text
           className={`text-base mr-2 ${
@@ -88,7 +87,6 @@ export default function SoonNative() {
         </Pressable>
       </View>
 
-      {/* Exit App as Pressable */}
       <Pressable
         onPress={() => BackHandler.exitApp()}
         className={`w-full max-w-sm py-3 rounded-xl border ${
