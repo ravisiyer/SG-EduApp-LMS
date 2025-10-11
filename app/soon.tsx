@@ -2,15 +2,17 @@ import React from 'react';
 import {
   View,
   Text,
-  Button,
   Alert,
   BackHandler,
   useColorScheme,
+  Pressable,
 } from 'react-native';
 import * as Linking from 'expo-linking';
+import { useRouter } from 'expo-router';
 import '@/global.css';
 
 export default function SoonNative() {
+  const router = useRouter();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const webSoonUrl = process.env.EXPO_PUBLIC_WEB_SOON_URL;
@@ -60,14 +62,47 @@ export default function SoonNative() {
       </Text>
 
       {webSoonUrl && (
-        <View className="w-full max-w-sm">
-          <Button title="Join Waitlist (opens web)" onPress={handleJoinWeb} />
-        </View>
+        <Pressable
+          onPress={handleJoinWeb}
+          className={`w-full max-w-sm py-3 rounded-xl mb-6 ${
+            isDark ? 'bg-blue-600' : 'bg-blue-500'
+          }`}
+        >
+          <Text className="text-center text-white font-semibold text-base">
+            Join Waitlist (opens web)
+          </Text>
+        </Pressable>
       )}
 
-      <View className="w-full max-w-sm mt-4">
-        <Button title="Exit App" color="#999" onPress={() => BackHandler.exitApp()} />
+      {/* Inline “Already have access? Sign in” section */}
+      <View className="flex-row items-center justify-center mb-8">
+        <Text
+          className={`text-base mr-2 ${
+            isDark ? 'text-gray-300' : 'text-gray-600'
+          }`}
+        >
+          Already have access?
+        </Text>
+        <Pressable onPress={() => router.replace('/login')}>
+          <Text className="text-blue-500 text-base font-semibold">Sign in</Text>
+        </Pressable>
       </View>
+
+      {/* Exit App as Pressable */}
+      <Pressable
+        onPress={() => BackHandler.exitApp()}
+        className={`w-full max-w-sm py-3 rounded-xl border ${
+          isDark ? 'border-gray-700' : 'border-gray-300'
+        }`}
+      >
+        <Text
+          className={`text-center font-semibold text-base ${
+            isDark ? 'text-gray-300' : 'text-gray-600'
+          }`}
+        >
+          Exit App
+        </Text>
+      </Pressable>
     </View>
   );
 }
