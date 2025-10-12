@@ -68,6 +68,12 @@ const Page = () => {
   const onHandleCompleteLesson = () => {
     console.log("Entered onHandleCompleteLesson");
     if (!lesson) return; // <- guard for TypeScript
+
+    if (!hasNextLesson) {
+      onEndCourse();
+      return;
+    }
+
     const progress = Math.floor((parseInt(lessonIndex) / (lessons?.length || 0)) * 100);
 
     console.log("Invoking markLessonAsCompleted with:", {
@@ -142,7 +148,14 @@ if (!validLessonIndex) {
   if (lesson?.video) {
     if (lastLessonIndexRef.current !== lessonIndex) {
       console.log("Replacing video in player for lessonIndex", lessonIndex);
+      // if (Platform.OS === 'web') {
+      // // Only mutes the audio; Does not autoplay on web
+      //   player.muted = true; 
+      // }
       player.replace(lesson.video);
+      // player.play(); // Does not autoplay on web; Not needed for Android
+        // see [expo-video] Autoplay doesn't work for video on Web #36350, 
+        // https://github.com/expo/expo/issues/36350
       lastLessonIndexRef.current = lessonIndex;
     } else {
       // Optional debug log:
