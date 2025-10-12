@@ -19,6 +19,7 @@ const Page = () => {
   const confettiRef = useRef<ConfettiMethods>(null);
   const [isMounted, setIsMounted] = useState(false);
   const externalNavigationRef  = useRef(true);
+  const lastLessonIndexRef = useRef<string | null>(null);
 
   useEffect(() => {
     // Give the player a short time to settle before we start reacting to events
@@ -139,11 +140,15 @@ if (!validLessonIndex) {
   }
 
   if (lesson?.video) {
-    // Does this cause the video to restart at times?
-    console.log("Replacing video in player for lessonIndex", lessonIndex);
-    player.replace(lesson.video);
+    if (lastLessonIndexRef.current !== lessonIndex) {
+      console.log("Replacing video in player for lessonIndex", lessonIndex);
+      player.replace(lesson.video);
+      lastLessonIndexRef.current = lessonIndex;
+    } else {
+      // Optional debug log:
+      console.log("Skipping replace, same lessonIndex", lessonIndex);
+    }
   }
-
   // player.replace(lesson.video);
 
   // Automatically play the video in production
