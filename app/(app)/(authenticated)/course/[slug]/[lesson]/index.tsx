@@ -139,6 +139,8 @@ if (!validLessonIndex) {
   }
 
   if (lesson?.video) {
+    // Does this cause the video to restart at times?
+    console.log("Replacing video in player for lessonIndex", lessonIndex);
     player.replace(lesson.video);
   }
 

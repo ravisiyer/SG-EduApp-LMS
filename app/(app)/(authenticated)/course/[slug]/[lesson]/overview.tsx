@@ -95,10 +95,20 @@ const Page = () => {
       <View className="px-4 pt-4 bg-white dark:bg-black flex-1">
         <Text className="text-2xl font-bold text-gray-800 dark:text-white">{course.title}</Text>
         <View className="flex-1 py-4 min-h-[100px]">
-          <RichtTextContent 
+          {course.description ? (
+            <RichtTextContent 
+              colorScheme={colorScheme}
+              blockContent={course.description} 
+            />
+          ) : (
+            <Text className="text-center text-gray-500 dark:text-gray-400">
+              No description for this course.
+            </Text>
+          )}
+          {/* <RichtTextContent 
             colorScheme={colorScheme}
             blockContent={course.description} 
-          />
+          /> */}
         </View>
       </View>
 
