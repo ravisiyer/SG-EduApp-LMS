@@ -33,6 +33,19 @@ const StrapiContext = createContext<StrapiContextType | undefined>(undefined);
 
 export function StrapiProvider({ children }: { children: ReactNode }) {
   const baseUrl = process.env.EXPO_PUBLIC_STRAPI_API_URL as string;
+  let backendMode: 'local' | 'cloud' | 'unknown';
+
+  if (baseUrl.startsWith('https://')) {
+    backendMode = 'cloud';
+  } else if (baseUrl.startsWith('http://')) {
+    backendMode = 'local';
+  } else {
+    backendMode = 'unknown';
+  }
+
+  console.log(`Strapi backendMode: ${backendMode}`);
+  console.log(`Strapi API URL: ${baseUrl}`);
+
   const { user } = useUser();
   const queryClient = useQueryClient();
 
@@ -69,7 +82,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
       const result = await response.json();
 
       result.data = result.data.map((item: any) => {
-        const image = (__DEV__)
+        const image = (__DEV__) && backendMode === 'local'
         ? `${baseUrl}${item.image.url}`  // In Development
         : `${item.image.url}`
         return {
@@ -99,7 +112,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
 
       const result = await response.json();
 
-      const image = (__DEV__)
+      const image = (__DEV__) && backendMode === 'local'
        ? `${baseUrl}${result.data[0].image.url}`  // In Development
        : `${result.data[0].image.url}`
 
@@ -154,7 +167,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
         throw new Error(`No lesson found for slug "${slug}" and lessonIndex ${lessonIndex}`);
       }
 
-      result.data[0].video = (__DEV__)
+      result.data[0].video = (__DEV__) && backendMode === 'local'
        ? `${baseUrl}${result.data[0].video.url}`  // In Development
        : `${result.data[0].video.url}`
       // result.data[0].video = `${result.data[0].video.url}`;
@@ -192,7 +205,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const result = await response.json();
-      const image = (__DEV__)
+      const image = (__DEV__) && backendMode === 'local'
        ? `${baseUrl}${result.data.image.url}`  // In Development
        : `${result.data.image.url}`
 
@@ -248,7 +261,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
 
       const result = await response.json();
       result.data.forEach((entry: any) => {
-        entry.course.image = (__DEV__)
+        entry.course.image = (__DEV__) && backendMode === 'local'
         ? `${baseUrl}${entry.course.image.url}`  // In Development
         : `${entry.course.image.url}`;
         // entry.course.image = `${entry.course.image.url}`;
