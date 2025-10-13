@@ -6,6 +6,7 @@
     "start": "expo start",
     "start:local-be": "copy .env .env.back && copy .env.localback .env && expo start",
     "start:cloud-be": "copy .env .env.back && copy .env.cloud.be .env && expo start",
+    "export-web": "copy .env .env.back && copy .env.cloud.fs .env && expo export --platform web",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "lms",
-    "slug": "lms",
+    "slug": "sg-eduapp-lms",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -51,6 +51,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": "https://fake-devonly-lms.expo.app"
+      },
+      "eas": {
+        "projectId": "968daf71-15e9-4de5-975f-ace3c1c1859b"
+      }
+    },
+    "owner": "ravisiyer"
   }
 }
