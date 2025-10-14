@@ -65,13 +65,13 @@ export default function Index() {
           <Text className="text-3xl font-bold text-white mb-2">Your journey starts here</Text>
 
           <View className="w-full gap-4 px-4">
-            <Pressable
+            {/* <Pressable
               className="w-full flex-row justify-center items-center bg-white py-3 rounded-lg hover:cursor-pointer hover:bg-gray-800 duration-300"
+              onPress={() => handleSignInWithSSO('oauth_apple')}
               >
-              {/* onPress={() => handleSignInWithSSO('oauth_apple')}> */}
               <Ionicons name="logo-apple" size={24} color="black" className="mr-2" />
               <Text className="text-black text-center font-semibold ml-2">Continue with Apple</Text>
-            </Pressable>
+            </Pressable> */}
 
             <Pressable
               className="w-full flex-row justify-center items-center bg-white py-3 rounded-lg hover:cursor-pointer hover:bg-gray-800 duration-300"
