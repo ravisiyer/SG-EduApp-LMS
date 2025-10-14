@@ -12,38 +12,43 @@ export default function Index() {
 
   const handleSignInWithSSO = async (strategy: 'oauth_google' | 'oauth_apple') => {
     try {
-      const { createdSessionId, setActive, signUp } = await startSSOFlow({
-        strategy,
-      });
-      // console.log('after startSSOFlow', createdSessionId, signUp);
+      const { createdSessionId, setActive, signUp, signIn } = await startSSOFlow({ strategy });
 
-      // If sign in was successful, set the active session
+      console.log(signUp, signIn);
+
       if (createdSessionId) {
-        // console.log('sign in successful');
-        setActive!({ session: createdSessionId });
+        await setActive!({ session: createdSessionId });
 
-        const email = signUp?.emailAddress;
-        const username = signUp?.emailAddress;
-        const password = randomUUID();
-        const id = signUp?.createdUserId;
+        // Only create Strapi user if this is a new signup
+        // In debugging, I found that if user is only signing in, signUp is not null
+        // but signUp.id is undefined and signUp.status (also _status) is null
+        // https://clerk.com/docs/reference/javascript/sign-up#properties states that 
+        // status 'complete' means:
+        // The user has been created and the custom flow can proceed to setActive() to create session.
+        //
+        // I also had to change sign up mode in Clerk dashboard from waitlist to public.
+        // After that, below code worked by differentiating correctly between new signup and existing user signin.
+        // But this approach does not seem to be documented in Clerk docs.
+        // The official approach seems to be more complicated which I want to skip for this tutorial.
+        // For a production app, I will have to use an official approach provided in Clerk docs.
+        if (signUp && signUp.status === 'complete') {
+          const email = signUp.emailAddress;
+          const username = email;
+          const password = randomUUID();
+          const id = signUp.createdUserId;
 
-        if (!email || !username || !password || !id) {
-          throw new Error('Missing required fields');
+          console.log(email, username, password, id);
+
+          if (!email || !username || !password || !id) {
+            throw new Error('Missing required fields for new user signup.');
+          }
+
+          const strapiUser = { email, username, password, clerkId: id };
+          await createUser(strapiUser);
         }
-
-        const strapiUser = {
-          email,
-          username,
-          password,
-          clerkId: id,
-        };
-
-        await createUser(strapiUser);
       }
     } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
-      console.log(err);
+      console.log('SSO flow error:', err);
     }
   };
 
