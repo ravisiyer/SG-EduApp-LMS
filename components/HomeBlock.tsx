@@ -1,11 +1,12 @@
 'use dom';
 import { HomeInfo } from '@/types/interfaces';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
-import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Dimensions, ScaledSize } from 'react-native';
 import '@/global.css';
 import { Link } from 'expo-router';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Animated, { FadeIn, Easing } from 'react-native-reanimated';
+import { useEffect, useState } from 'react';
 
 export default function HomeBlock({
   homeInfo,
@@ -15,22 +16,43 @@ export default function HomeBlock({
   colorScheme: 'light' | 'dark';
   dom: import('expo/dom').DOMProps;
 }) {
-  const blockContent = homeInfo?.content;
-  // blockContent && console.log('blockContent', blockContent);
+  const [windowWidth, setWindowWidth] = useState(Dimensions.get('window').width);
+  const [windowHeight, setWindowHeight] = useState(Dimensions.get('window').height);
 
-  const windowWidth = Dimensions.get('window').width;
+  useEffect(() => {
+    const onChange = ({ window }: {  window: ScaledSize }) => {
+      setWindowWidth(window.width);
+      setWindowHeight(window.height);      
+    };
+
+    const subscription = Dimensions.addEventListener('change', onChange);
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   const isMobileWidth = windowWidth < 768;
+  const maxHeightStyle = { maxHeight: windowHeight * 0.5 } // ✅ numeric value for native
+  // const maxHeightStyle =
+  //   isMobileWidth 
+  //     ? { maxHeight: windowHeight * 0.5 } // ✅ numeric value for native
+  //     : undefined;
+  const blockContent = homeInfo?.content;
+
+  // const windowWidth = Dimensions.get('window').width;
+  // const isMobileWidth = windowWidth < 768;
 
   console.log('windowWidth', windowWidth, 'isMobileWidth', isMobileWidth);
   return (
     <Animated.View className="w-screen pb-14" entering={FadeIn.duration(200).easing(Easing.ease)}>
-      {/* <Image source={{ uri: homeInfo?.image }} className="w-screen h-40" /> */}
-      {/* <Image source={{ uri: homeInfo?.image }} className="w-screen h-40" resizeMode="contain" /> */}
        <Image 
           source={{ uri: homeInfo?.image }} 
-            // className={isMobileWidth ? 'w-full aspect-video' : 'w-full h-[40vh]'}
-            className={isMobileWidth ? 'w-full aspect-video' : 'w-full h-40'}
-            resizeMode={isMobileWidth ? 'contain' : 'stretch'}
+            className={'w-full aspect-video'}
+            // className={isMobileWidth ? 'w-full aspect-video' : 'w-full h-40'}
+            resizeMode={'contain'}
+            // resizeMode={isMobileWidth ? 'contain' : 'stretch'}
+            style={maxHeightStyle}
         />
      <View className={`w-screen p-4 ${colorScheme === 'dark' ? 'text-white' : ''}`}>
           {blockContent && <BlocksRenderer content={blockContent}/>}
