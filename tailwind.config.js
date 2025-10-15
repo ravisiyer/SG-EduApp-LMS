@@ -12,6 +12,9 @@ module.exports = {
         secondary: 'var(--secondary)',
         tertiary: 'var(--tertiary)',
       },
+      screens: {
+        xs: '500px', // ✅ custom breakpoint for <500px width
+      },
     },
   },
   plugins: [],
