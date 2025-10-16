@@ -1,0 +1,138 @@
+2025-10-16 11:42:15 
+Below code had attempts based on ChatGPT suggestions to get parallax to work on android.
+On web the earlier code worked but on Android it did not despite many trials.
+As I do not know the code details for parallax, I was simply copy-pasting CG suggested
+code and trying it out.
+As parallax effect is not important for my tutorial app learning objectives, I do not want
+to invest time to undertand that code and then debug it. In future, if needed I can dig into it.
+Perhaps the code below may then be useful.
+I am reverting the overview.tsx file to what it was prior to these attempts i.e. parallax works
+on web (both PC web and mobile web) but not on android.
+---------- overview.tsx code below ----------
+import { View, Text, ActivityIndicator, useWindowDimensions, TouchableOpacity, useColorScheme, Platform } from 'react-native';
+import { router, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
+import { useStrapi } from '@/providers/StrapiProvider';
+import { useQuery } from '@tanstack/react-query';
+import RichtTextContent from '@/components/RichtTextContent';
+import Animated, {
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+  interpolate,
+  FadeIn,
+} from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
+
+const HEADER_HEIGHT = 200;
+const HEADER_SCALE = 1.8;
+
+const Page = () => {
+  const colorScheme = useColorScheme() as 'light' | 'dark';
+  const { slug } = useGlobalSearchParams<{ slug: string }>();
+  const { getCourse } = useStrapi();
+  const { width: windowWidth } = useWindowDimensions();
+  const scrollY = useSharedValue(0);
+
+  const { data: course, isLoading } = useQuery({
+    queryKey: ['course', slug],
+    queryFn: () => getCourse(slug),
+    enabled: !!slug,
+  });
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      scrollY.value = event.contentOffset.y;
+    },
+  });
+
+    const scrollRange = Platform.OS === 'web' ? HEADER_HEIGHT : 50; // 50px scroll on mobile
+
+    const imageAnimatedStyle = useAnimatedStyle(() => {
+      const scale = interpolate(
+        scrollY.value,
+        [-scrollRange, 0, scrollRange],
+        [1.2, 1, 1.1] // subtler scale for mobile
+      );
+
+      const translateY = interpolate(
+        scrollY.value,
+        [-scrollRange, 0, scrollRange],
+        [-scrollRange / 2, 0, scrollRange / 2] // adjust translation
+      );
+
+    return {
+      transform: [{ scale }, { translateY }],
+    };
+  });
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 items-center justify-center mt-10">
+        <ActivityIndicator color="#0d6c9a" />
+      </View>
+    );
+  }
+
+  if (!course) {
+    return (
+      <View className="flex-1 items-center justify-center mt-10">
+        <Text>Course not found</Text>
+      </View>
+    );
+  }
+
+  return (
+    <Animated.ScrollView
+      className="bg-white dark:bg-black"
+      entering={FadeIn}
+      onScroll={scrollHandler}
+      scrollEventThrottle={16}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ flexGrow: 1 }}>
+      <View className="relative" style={{ height: HEADER_HEIGHT }}>
+        <Animated.Image
+          source={{ uri: course.image }}
+          className="absolute w-full object-cover"
+          style={[
+            imageAnimatedStyle,
+            {
+              height: HEADER_HEIGHT,
+              width: windowWidth,
+            },
+          ]}
+          resizeMode="cover"
+        />
+      </View>
+
+      {/* Course Info Section */}
+      <View className="px-4 pt-4 bg-white dark:bg-black flex-1">
+        <Text className="text-2xl font-bold text-gray-800 dark:text-white">{course.title}</Text>
+        <View className="flex-1 py-4 min-h-[100px]">
+          {course.description ? (
+            <RichtTextContent 
+              colorScheme={colorScheme}
+              blockContent={course.description} 
+            />
+          ) : (
+            <Text className="text-center text-gray-500 dark:text-gray-400">
+              No description for this course.
+            </Text>
+          )}
+          {/* <RichtTextContent 
+            colorScheme={colorScheme}
+            blockContent={course.description} 
+          /> */}
+        </View>
+      </View>
+
+      <TouchableOpacity
+        className="bg-primary py-3 flex-row items-center justify-center pb-safe gap-2"
+        onPress={() => router.push(`/course/${course.slug}/1`)}>
+        <Text className="text-center text-white font-medium">Start Course</Text>
+        <Ionicons name="arrow-forward" size={24} color="white" />
+      </TouchableOpacity>
+    </Animated.ScrollView>
+  );
+};
+
+export default Page;
