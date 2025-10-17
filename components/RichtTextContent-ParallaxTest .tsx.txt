@@ -1,8 +1,10 @@
-'use dom';
+2025-10-17 19:16:06
+The code below uses dummy data and this code has correct scrolling with parallax effect on Android.
+---------- RichtTextContent.tsx code below ----------
+// 'use dom';
 import { BlocksContent, BlocksRenderer } from '@strapi/blocks-react-renderer';
 import '@/global.css';
-import { View } from 'react-native';
-// import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { DOMProps } from 'expo/dom';
 
 const RichtTextContent = ({
@@ -14,13 +16,7 @@ const RichtTextContent = ({
     dom?: DOMProps
   }) => {
   return (
-    <View className={`flex-1 ${colorScheme === 'dark' ? 'bg-black text-white' : 'bg-white text-gray-800'}`}>
-    {/* <View className="flex-1"> */}
-      <BlocksRenderer content={blockContent} />
-      {/* Below Array.from ... is dummy code that that can be used to test parallax effect on Android
-          It requires above BlocksRenderer and 'use dom' at top of file to be commented out.
-          It also needs import Text statement to be uncommented. */}
-      {/* 
+    <View className={`${colorScheme === 'dark' ? 'bg-black text-white' : 'bg-white text-gray-800'}`}>
       {Array.from({ length: 45 }).map((_, idx) => (
         <Text
           key={idx}
@@ -28,7 +24,9 @@ const RichtTextContent = ({
         >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Line {idx + 1}
         </Text>
-      ))} */}
+      ))}
+
+      {/* // <BlocksRenderer content={blockContent} /> */}
     </View>
   );
 };

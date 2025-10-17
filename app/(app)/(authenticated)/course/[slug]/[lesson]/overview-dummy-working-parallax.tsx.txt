@@ -1,3 +1,6 @@
+2025-10-17 19:31
+The code below uses dummy data and this code has correct scrolling with parallax effect on Android.
+---------- overview.tsx code below ----------
 import { View, Text, ActivityIndicator, useWindowDimensions, TouchableOpacity,
   useColorScheme} from 'react-native';
 import { router, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
@@ -13,7 +16,7 @@ import Animated, {
   runOnUI,
 } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const HEADER_HEIGHT = 200;
 const HEADER_SCALE = 1.8;
@@ -24,7 +27,8 @@ const Page = () => {
   const { getCourse } = useStrapi();
   const { width: windowWidth } = useWindowDimensions();
   const scrollY = useSharedValue(0);
-  
+  const [scrollYDisplay, setScrollYDisplay] = useState(0);
+
   useEffect(() => {
     try {
       runOnUI(() => {
@@ -44,6 +48,7 @@ const Page = () => {
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
+      'worklet';
       scrollY.value = event.contentOffset.y;
     },
   });
@@ -110,19 +115,26 @@ const Page = () => {
         <Text className="text-2xl font-bold text-gray-800 dark:text-white">{course.title}</Text>
         <View className="flex-1 py-4 min-h-[100px]">
           {course.description ? (
-            <RichtTextContent 
-              colorScheme={colorScheme}
-              blockContent={course.description} 
-            />
+            // <RichtTextContent 
+            //   colorScheme={colorScheme}
+            //   blockContent={course.description} 
+            // />
+           // Parallax effect works fine with below dummy content 
+          <View className="mt-4 space-y-2">
+            {Array.from({ length: 45 }).map((_, idx) => (
+              <Text
+                key={idx}
+                className="text-gray-700 dark:text-gray-300"
+              >
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Line {idx + 1}
+              </Text>
+            ))}
+          </View>
           ) : (
             <Text className="text-center text-gray-500 dark:text-gray-400">
               No description for this course.
             </Text>
           )}
-          {/* <RichtTextContent 
-            colorScheme={colorScheme}
-            blockContent={course.description} 
-          /> */}
         </View>
       </View>
 
@@ -137,3 +149,4 @@ const Page = () => {
 };
 
 export default Page;
+
