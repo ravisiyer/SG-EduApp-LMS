@@ -2,7 +2,6 @@
 import { BlocksContent, BlocksRenderer } from '@strapi/blocks-react-renderer';
 import '@/global.css';
 import { View } from 'react-native';
-// import { Text } from 'react-native';
 import { DOMProps } from 'expo/dom';
 
 const RichtTextContent = ({
@@ -17,18 +16,6 @@ const RichtTextContent = ({
     <View className={`flex-1 ${colorScheme === 'dark' ? 'bg-black text-white' : 'bg-white text-gray-800'}`}>
     {/* <View className="flex-1"> */}
       <BlocksRenderer content={blockContent} />
-      {/* Below Array.from ... is dummy code that that can be used to test parallax effect on Android
-          It requires above BlocksRenderer and 'use dom' at top of file to be commented out.
-          It also needs import Text statement to be uncommented. */}
-      {/* 
-      {Array.from({ length: 45 }).map((_, idx) => (
-        <Text
-          key={idx}
-          className="text-gray-700 dark:text-gray-300"
-        >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Line {idx + 1}
-        </Text>
-      ))} */}
     </View>
   );
 };

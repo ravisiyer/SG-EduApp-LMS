@@ -1,5 +1,4 @@
-import { View, Text, ActivityIndicator, useWindowDimensions, TouchableOpacity,
-  useColorScheme} from 'react-native';
+import { View, Text, ActivityIndicator, useWindowDimensions, TouchableOpacity, useColorScheme } from 'react-native';
 import { router, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { useQuery } from '@tanstack/react-query';
@@ -10,10 +9,8 @@ import Animated, {
   useSharedValue,
   interpolate,
   FadeIn,
-  runOnUI,
 } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
-import { useEffect } from 'react';
 
 const HEADER_HEIGHT = 200;
 const HEADER_SCALE = 1.8;
@@ -24,17 +21,6 @@ const Page = () => {
   const { getCourse } = useStrapi();
   const { width: windowWidth } = useWindowDimensions();
   const scrollY = useSharedValue(0);
-  
-  useEffect(() => {
-    try {
-      runOnUI(() => {
-        'worklet';
-        console.log('✅ Worklets ARE running on the UI thread');
-      })();
-    } catch (e) {
-      console.error('❌ Worklets are NOT configured properly:', e);
-    }
-  }, []);
 
   const { data: course, isLoading } = useQuery({
     queryKey: ['course', slug],
@@ -113,6 +99,7 @@ const Page = () => {
             <RichtTextContent 
               colorScheme={colorScheme}
               blockContent={course.description} 
+              dom={{ matchContents: true, scrollEnabled: false }}
             />
           ) : (
             <Text className="text-center text-gray-500 dark:text-gray-400">
