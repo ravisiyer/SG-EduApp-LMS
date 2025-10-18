@@ -1,12 +1,11 @@
 'use dom';
 import { HomeInfo } from '@/types/interfaces';
 import { BlocksRenderer } from '@strapi/blocks-react-renderer';
-import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions, ScaledSize } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import '@/global.css';
 import { Link } from 'expo-router';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Animated, { FadeIn, Easing } from 'react-native-reanimated';
-import { useEffect, useState } from 'react';
 
 export default function HomeBlock({
   homeInfo,
@@ -16,44 +15,30 @@ export default function HomeBlock({
   colorScheme: 'light' | 'dark';
   dom: import('expo/dom').DOMProps;
 }) {
-  const [windowWidth, setWindowWidth] = useState(Dimensions.get('window').width);
-  const [windowHeight, setWindowHeight] = useState(Dimensions.get('window').height);
-
-  useEffect(() => {
-    const onChange = ({ window }: { window: ScaledSize }) => {
-      setWindowWidth(window.width);
-      setWindowHeight(window.height);
-    };
-
-    const subscription = Dimensions.addEventListener('change', onChange);
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
-  const isMobileWidth = windowWidth < 768;
-  const maxHeightStyle = { maxHeight: windowHeight * 0.5 };
   const blockContent = homeInfo?.content;
-
-  // console.log('windowWidth', windowWidth, 'isMobileWidth', isMobileWidth);
 
   return (
     <ScrollView className="w-screen" contentContainerStyle={{ flexGrow: 1 }}>
       <Animated.View
-        className="w-screen pb-14"
+        className="pb-14"
         entering={FadeIn.duration(200).easing(Easing.ease)}
+        style={{
+          maxWidth: 800,
+          width: '100%',        // take full width on small screens
+          alignSelf: 'center',  // center horizontally
+        }}        
       >
         <Image
           source={{ uri: homeInfo?.image }}
           className="w-full aspect-video"
           resizeMode="contain"
-          style={maxHeightStyle}
+          style={{ maxHeight: 330 }}
         />
-        <View className={`w-screen p-4 ${colorScheme === 'dark' ? 'text-white' : ''}`}>
+        <View className={`max-w-[800px] p-4 ${colorScheme === 'dark' ? 'text-white' : ''}`}>
           {blockContent && <BlocksRenderer content={blockContent} />}
         </View>
         <Link href="/courses" asChild>
-          <TouchableOpacity className="bg-primary p-4 px-8 rounded-md mx-auto flex-row items-center justify-center gap-4">
+          <TouchableOpacity className="bg-primary p-3 px-8 rounded-md mx-auto flex-row items-center justify-center gap-4">
             <FontAwesome5 name="yin-yang" size={24} color="white" className="animate-spin" />
             <Text className="text-center text-white font-bold">Browse Courses</Text>
           </TouchableOpacity>
