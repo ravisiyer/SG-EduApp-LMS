@@ -36,7 +36,8 @@ export default function HomeScreen() {
               <Animated.View
                 key={item.id}
                 entering={FadeIn.delay(index * 400).duration(800)}
-                className="flex-1">
+                className="flex-1"
+                style={{ maxWidth: '100%' }}>
                 <CourseCard
                   {...item.course}
                   finished_percentage={item.finished_percentage}

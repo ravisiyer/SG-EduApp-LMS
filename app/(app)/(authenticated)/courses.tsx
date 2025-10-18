@@ -20,7 +20,8 @@ const Page = () => {
               <Animated.View
                 key={item.id}
                 entering={FadeIn.delay(index * 400).duration(800)}
-                className="w-full md:flex-1">
+                className="w-full md:flex-1"
+                style={{ maxWidth: '100%' }}>
                 <CourseCard {...item} />
               </Animated.View>
             ))}
