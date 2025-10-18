@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ActivityIndicator, Platform, useColorScheme, useWindowDimensions } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity, ActivityIndicator, Platform, useColorScheme, useWindowDimensions } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -201,7 +201,12 @@ if (!validLessonIndex) {
   const videoHeight = isMobileWebLandscape ? '60%' : Platform.OS === 'web' ? '40%' : '30%';
 
   return (
-    <View className="flex-1">
+    <ScrollView 
+      className="flex-1"
+      contentContainerStyle={{ flexGrow: 1 }}
+      showsVerticalScrollIndicator={true}
+    >
+    {/* <View className="flex-1"> */}
       {Platform.OS !== 'web' && (
         <Confetti
           ref={confettiRef}
@@ -256,7 +261,8 @@ if (!validLessonIndex) {
           <Ionicons name="checkmark-circle-outline" size={24} color="white" />
         </TouchableOpacity>
       )}
-    </View>
+    </ScrollView>
+    // </View>
   );
 };
 export default Page;
