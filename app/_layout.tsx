@@ -76,7 +76,7 @@ const InitialLayout = () => {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  console.log("Main _layout: In RootLayout");  
+  // console.log("Main _layout: In RootLayout");  
 
   return (
     <ClerkProvider

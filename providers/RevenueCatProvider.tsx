@@ -51,7 +51,7 @@ export const RevenueCatProvider = ({ children }: any) => {
   const loadOfferings = async () => {
     const offerings = await Purchases.getOfferings();
     if (offerings.current) {
-      console.log('offerings', offerings.current);
+      // console.log('offerings', offerings.current);
       setPackages(offerings.current.availablePackages);
     }
   };

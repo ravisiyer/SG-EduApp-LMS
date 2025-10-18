@@ -14,7 +14,7 @@ export default function Index() {
     try {
       const { createdSessionId, setActive, signUp, signIn } = await startSSOFlow({ strategy });
 
-      console.log(signUp, signIn);
+      // console.log(signUp, signIn);
 
       if (createdSessionId) {
         await setActive!({ session: createdSessionId });
@@ -37,7 +37,7 @@ export default function Index() {
           const password = randomUUID();
           const id = signUp.createdUserId;
 
-          console.log(email, username, password, id);
+          // console.log(email, username, password, id);
 
           if (!email || !username || !password || !id) {
             throw new Error('Missing required fields for new user signup.');

@@ -35,7 +35,7 @@ export default function HomeBlock({
   const maxHeightStyle = { maxHeight: windowHeight * 0.5 };
   const blockContent = homeInfo?.content;
 
-  console.log('windowWidth', windowWidth, 'isMobileWidth', isMobileWidth);
+  // console.log('windowWidth', windowWidth, 'isMobileWidth', isMobileWidth);
 
   return (
     <ScrollView className="w-screen" contentContainerStyle={{ flexGrow: 1 }}>

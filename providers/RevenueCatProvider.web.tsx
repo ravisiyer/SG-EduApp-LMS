@@ -36,9 +36,9 @@ export const RevenueCatProvider = ({ children }: any) => {
   // Load all offerings a user can (currently) purchase
   const loadOfferings = async () => {
     const offerings = await Purchases.getSharedInstance().getOfferings();
-    console.log('🚀 ~ loadOfferings ~ offerings:', offerings);
+    // console.log('🚀 ~ loadOfferings ~ offerings:', offerings);
     if (offerings.current !== null && offerings.current.availablePackages.length !== 0) {
-      console.log('offerings', offerings.current.availablePackages);
+      // console.log('offerings', offerings.current.availablePackages);
       setWebPackages(offerings.current.availablePackages);
     }
   };

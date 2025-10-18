@@ -213,7 +213,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
         ...result.data,
         image,
       };
-      console.log('result.data', result.data);
+      // console.log('result.data', result.data);
       return result.data;
     } catch (error) {
       throw error;
@@ -221,14 +221,14 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
   };
 
   const addUserToCourse = async (courseId: string): Promise<UserCourses> => {
-    console.log("Entered addUserToCourse with courseId:", courseId);
+    // console.log("Entered addUserToCourse with courseId:", courseId);
     try {
       const body = {
         courseId,
         clerkId: user?.id,
       };
 
-      console.log("In addUserToCourse before fetch call to /api/add-user-course with body:", body);
+      // console.log("In addUserToCourse before fetch call to /api/add-user-course with body:", body);
       const response = await fetch(`/api/add-user-course`, {
         method: 'POST',
         headers: {
@@ -324,7 +324,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
     nextLessonIndex?: number,
     mapToUserCourse = false
   ) => {
-    console.log("Entered updateUserCourseProgress with:", { courseId, progress, nextLessonIndex, mapToUserCourse });
+    // console.log("Entered updateUserCourseProgress with:", { courseId, progress, nextLessonIndex, mapToUserCourse });
     let userCourseId = courseId;
 
     if (mapToUserCourse) {
@@ -336,7 +336,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
           return;
         }
         userCourseId = uc.documentId;
-        console.log("Mapped courseId to userCourseId:", userCourseId);
+        // console.log("Mapped courseId to userCourseId:", userCourseId);
       } catch (err) {
         console.error("Failed to map courseId to userCourseId:", err);
         return;

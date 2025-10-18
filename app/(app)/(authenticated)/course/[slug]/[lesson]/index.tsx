@@ -50,7 +50,7 @@ const Page = () => {
   useEffect(() => {
     if (!lesson || !lessons) return;
 
-    console.log("In useEffect for updating course progress. externalNavigationRef.current =", externalNavigationRef .current);
+    // console.log("In useEffect for updating course progress. externalNavigationRef.current =", externalNavigationRef .current);
     // Only update when navigation is external (not from local router.push)
     if (!externalNavigationRef .current) {
       externalNavigationRef .current = true;
@@ -66,7 +66,7 @@ const Page = () => {
   }, [lesson, lessons, lessonIndex, queryClient]);
 
   const onHandleCompleteLesson = () => {
-    console.log("Entered onHandleCompleteLesson");
+    // console.log("Entered onHandleCompleteLesson");
     if (!lesson) return; // <- guard for TypeScript
 
     if (!hasNextLesson) {
@@ -76,12 +76,12 @@ const Page = () => {
 
     const progress = Math.floor((parseInt(lessonIndex) / (lessons?.length || 0)) * 100);
 
-    console.log("Invoking markLessonAsCompleted with:", {
-      lessonId: lesson.documentId,
-      courseId: lesson.course.documentId,
-      progress,
-      nextLessonIndex: parseInt(lessonIndex) + 1
-    });
+    // console.log("Invoking markLessonAsCompleted with:", {
+    //   lessonId: lesson.documentId,
+    //   courseId: lesson.course.documentId,
+    //   progress,
+    //   nextLessonIndex: parseInt(lessonIndex) + 1
+    // });
     (async () => {
       await markLessonAsCompleted(
         lesson.documentId,
@@ -105,10 +105,10 @@ const Page = () => {
 
   useEventListener(player, 'playToEnd', () => {
     if (!isMounted) {
-      console.log('In playToEnd event handler. Ignoring spurious playToEnd event during mount');
+      // console.log('In playToEnd event handler. Ignoring spurious playToEnd event during mount');
       return;
     }
-    console.log("isMounted is true in playToEnd event handler. Will now invoke onHandleCompleteLesson.");
+    // console.log("isMounted is true in playToEnd event handler. Will now invoke onHandleCompleteLesson.");
     onHandleCompleteLesson();
   });
 
@@ -147,7 +147,7 @@ if (!validLessonIndex) {
 
   if (lesson?.video) {
     if (lastLessonIndexRef.current !== lessonIndex) {
-      console.log("Replacing video in player for lessonIndex", lessonIndex);
+      // console.log("Replacing video in player for lessonIndex", lessonIndex);
       // if (Platform.OS === 'web') {
       // // Only mutes the audio; Does not autoplay on web
       //   player.muted = true; 
@@ -159,7 +159,7 @@ if (!validLessonIndex) {
       lastLessonIndexRef.current = lessonIndex;
     } else {
       // Optional debug log:
-      console.log("Skipping replace, same lessonIndex", lessonIndex);
+      // console.log("Skipping replace, same lessonIndex", lessonIndex);
     }
   }
   // player.replace(lesson.video);
