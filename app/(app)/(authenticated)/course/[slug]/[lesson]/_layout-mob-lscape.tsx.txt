@@ -14,9 +14,6 @@ function CustomDrawerContent(props: any) {
   const pathname = usePathname();
   const colorScheme = useColorScheme();
 
-  // ✅ Get the passed prop instead of recalculating
-  const { isMobileWebLandscape } = props;
-
   const { data: lessons } = useQuery({
     queryKey: ['lessons', slug],
     queryFn: () => getLessonsForCourse(slug as string),
@@ -30,15 +27,11 @@ function CustomDrawerContent(props: any) {
 
   return (
     <View className="flex-1 py-safe">
-      {/* ✅ Hide top image when in mobile landscape */}
-      {!isMobileWebLandscape && (
-        <Image
-          source={require('@/assets/images/yoga.png')}
-          style={{ width: 200, height: 100, alignSelf: 'center' }}
-          resizeMode="contain"
-        />
-      )}
-
+      <Image
+        source={require('@/assets/images/yoga.png')}
+        style={{ width: 200, height: 100, alignSelf: 'center' }}
+        resizeMode="contain"
+      />
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
         <Text className="text-2xl font-bold p-4 text-black dark:text-white" >Lessons</Text>
@@ -79,24 +72,38 @@ function CustomDrawerContent(props: any) {
 
 const Layout = () => {
   const dimensions = useWindowDimensions();
-  const MOBILE_LANDSCAPE_MAX_HEIGHT = 500;
-  const isMobileWebLandscape =
+  const isLandscape = dimensions.width > dimensions.height;
+  const isMobileWeb =
     Platform.OS === 'web' &&
-    dimensions.width > dimensions.height &&
-    dimensions.height < MOBILE_LANDSCAPE_MAX_HEIGHT;
+    (navigator.userAgent.match(/Android/i) ||
+    navigator.userAgent.match(/iPhone/i));
+
+  const drawerType =
+    Platform.OS === 'web'
+      ? ((isMobileWeb && isLandscape)
+        ? 'front'
+        : dimensions.width > 768
+          ? 'permanent'
+          : 'front')
+      : 'front';
+
+  console.log('Drawer Type:', drawerType);
+  console.log('Dimensions:', dimensions);
 
   return (
     // <View><Text>Placeholder for Drawer</Text></View>
     <Drawer
-      // ✅ Pass as prop here
-      drawerContent={(props) => <CustomDrawerContent {...props} isMobileWebLandscape={isMobileWebLandscape} />}
+      drawerContent={CustomDrawerContent}
       screenOptions={{
         drawerActiveTintColor: '#0d6c9a',
-        drawerType: dimensions.width > 768 ? 'permanent' : 'front',
-        drawerStyle: {
-          width: isMobileWebLandscape ? 250 : (dimensions.width > 768 ? 350 : '80%'), 
-        },
-        headerShown: dimensions.width > 768 ? false : true,
+        drawerType: drawerType,
+        // drawerType: dimensions.width > 768 ? 'permanent' : 'front',
+        headerShown: 
+          (isMobileWeb && isLandscape)
+            ? true
+            : dimensions.width > 768 
+            ? false 
+            : true,
         // headerShown: Platform.OS === 'web' ? false : true,
       }}>
       <Drawer.Screen
@@ -106,14 +113,9 @@ const Layout = () => {
           // drawerIcon: () => (
           //   <Ionicons name="book-outline" />
           // ),
-        drawerIcon: isMobileWebLandscape
-          ? undefined
-          : ({ color, size }) => <Ionicons name="book-outline" size={size} color={color} />,
-          // drawerIcon: ({ color, size }) => (
-          //   isMobileWebLandscape
-          //     ? (undefined)
-          //     : (<Ionicons name="book-outline" size={size} color={color} />) 
-          // ),
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="book-outline" size={size} color={color} />
+          ),
         }}
       />
       <Drawer.Screen

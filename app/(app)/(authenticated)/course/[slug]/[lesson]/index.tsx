@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ActivityIndicator, Platform, useColorScheme } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, Platform, useColorScheme, useWindowDimensions } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -20,6 +20,13 @@ const Page = () => {
   const [isMounted, setIsMounted] = useState(false);
   const externalNavigationRef  = useRef(true);
   const lastLessonIndexRef = useRef<string | null>(null);
+
+  const dimensions = useWindowDimensions();
+  const MOBILE_LANDSCAPE_MAX_HEIGHT = 500;
+  const isMobileWebLandscape =
+    Platform.OS === 'web' &&
+    dimensions.width > dimensions.height &&
+    dimensions.height < MOBILE_LANDSCAPE_MAX_HEIGHT;
 
   useEffect(() => {
     // Give the player a short time to settle before we start reacting to events
@@ -191,6 +198,8 @@ if (!validLessonIndex) {
     console.log("Lesson notes are missing or empty for lesson:", lesson.documentId);
   }
 
+  const videoHeight = isMobileWebLandscape ? '60%' : Platform.OS === 'web' ? '40%' : '30%';
+
   return (
     <View className="flex-1">
       {Platform.OS !== 'web' && (
@@ -208,7 +217,8 @@ if (!validLessonIndex) {
         player={player}
         allowsFullscreen
         allowsPictureInPicture
-        style={{ width: '100%', height: Platform.OS === 'web' ? '40%' : '30%' }}
+        style={{ width: '100%', height: videoHeight }}
+        // style={{ width: '100%', height: Platform.OS === 'web' ? '40%' : '30%' }}
         contentFit="contain"
       />
 
