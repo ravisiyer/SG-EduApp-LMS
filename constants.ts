@@ -1,0 +1,1 @@
+export const MOBILE_LANDSCAPE_MAX_HEIGHT = 500;

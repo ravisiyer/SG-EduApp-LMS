@@ -8,6 +8,7 @@ import { useEventListener } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import { Confetti, ConfettiMethods } from 'react-native-fast-confetti';
 import { useEffect, useRef, useState } from 'react';
+import { MOBILE_LANDSCAPE_MAX_HEIGHT } from '@/constants';
 
 const Page = () => {
   const colorScheme = useColorScheme() as 'light' | 'dark';
@@ -22,7 +23,6 @@ const Page = () => {
   const lastLessonIndexRef = useRef<string | null>(null);
 
   const dimensions = useWindowDimensions();
-  const MOBILE_LANDSCAPE_MAX_HEIGHT = 500;
   const isMobileWebLandscape =
     Platform.OS === 'web' &&
     dimensions.width > dimensions.height &&

@@ -7,6 +7,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useQuery } from '@tanstack/react-query';
+import { MOBILE_LANDSCAPE_MAX_HEIGHT } from '@/constants';
 
 function CustomDrawerContent(props: any) {
   const { getLessonsForCourse } = useStrapi();
@@ -48,7 +49,8 @@ function CustomDrawerContent(props: any) {
           return (
             <DrawerItem
               key={lesson.lesson_index}
-              label={lesson.name}
+              // label={lesson.name}
+              label={() => (<Text className='dark:text-white'>{lesson.name}</Text>)}
               onPress={() => router.push(`/course/${slug}/${lesson.lesson_index}`)}
               focused={isActive}
               icon={({ color, size }) =>
@@ -79,7 +81,6 @@ function CustomDrawerContent(props: any) {
 
 const Layout = () => {
   const dimensions = useWindowDimensions();
-  const MOBILE_LANDSCAPE_MAX_HEIGHT = 500;
   const isMobileWebLandscape =
     Platform.OS === 'web' &&
     dimensions.width > dimensions.height &&

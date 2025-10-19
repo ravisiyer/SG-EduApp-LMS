@@ -1,14 +1,23 @@
 import { Slot, Link, usePathname } from 'expo-router';
-import { Text, View } from 'react-native';
+import { Text, useWindowDimensions, View } from 'react-native';
+import { MOBILE_LANDSCAPE_MAX_HEIGHT } from '@/constants';
 
 function AppHeader() {
   const pathname = usePathname();
   const activeTab = pathname.split('/')[0];
 
+  const dimensions = useWindowDimensions();
+  const isMobileWebLandscape =
+    dimensions.width > dimensions.height &&
+    dimensions.height < MOBILE_LANDSCAPE_MAX_HEIGHT;
+
   return (
     <View className="flex-row items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
       <View className="flex-row items-center gap-4 xs:gap-8">
-        <Link href="/" className="xs:font-bold xs:text-xl text-primary dark:text-white">
+        <Link href="/" 
+        className={`text-primary dark:text-white ${isMobileWebLandscape ? '' : 'xs:font-bold xs:text-xl' }`}
+        >
+        {/* <Link href="/" className="xs:font-bold xs:text-xl text-primary dark:text-white"> */}
           <Text>
             <Text>My Studio</Text>
           </Text>
