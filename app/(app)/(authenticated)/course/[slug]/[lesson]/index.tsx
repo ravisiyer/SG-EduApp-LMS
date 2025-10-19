@@ -202,7 +202,7 @@ if (!validLessonIndex) {
 
   return (
     <ScrollView 
-      className="flex-1"
+      // className="flex-1"
       contentContainerStyle={{
         flexGrow: 1,
         flexShrink: 1,  // <= crucial for web to prevent oversizing

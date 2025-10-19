@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useQuery } from '@tanstack/react-query';
 import { MOBILE_LANDSCAPE_MAX_HEIGHT } from '@/constants';
+import { useEffect, useRef } from 'react';
 
 function CustomDrawerContent(props: any) {
   const { getLessonsForCourse } = useStrapi();
@@ -22,6 +23,16 @@ function CustomDrawerContent(props: any) {
     queryKey: ['lessons', slug],
     queryFn: () => getLessonsForCourse(slug as string),
   });
+
+  // Ref for the currently active lesson
+  const activeLessonRef = useRef<HTMLDivElement | null>(null);
+
+  // Scroll active lesson into view on web when lessonIndex changes
+  useEffect(() => {
+    if (Platform.OS === 'web' && activeLessonRef.current) {
+      activeLessonRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [pathname, lessons, isMobileWebLandscape]);
 
   if (!lessons) {
     return <Text className="text-black dark:text-white">Loading...</Text>;
@@ -49,8 +60,30 @@ function CustomDrawerContent(props: any) {
           return (
             <DrawerItem
               key={lesson.lesson_index}
-              // label={lesson.name}
-              label={() => (<Text className='dark:text-white'>{lesson.name}</Text>)}
+              // ref={isActive ? activeLessonRef : null} // active lesson gets the ref
+              // label={() => (
+              //   <View ref={isActive ? activeLessonRef : null}>
+              //     <Text className="dark:text-white">{lesson.name}</Text>
+              //   </View>
+              // )}
+              label={() => {
+                if (Platform.OS === 'web') {
+                  // Use a plain div for web to attach ref
+                  return (
+                    <div ref={isActive ? activeLessonRef : null}>
+                      <Text className="dark:text-white">{lesson.name}</Text>
+                    </div>
+                  );
+                } else {
+                  // Native: just use View, no ref needed
+                  return (
+                    <View>
+                      <Text className="dark:text-white">{lesson.name}</Text>
+                    </View>
+                  );
+                }
+              }}              
+              // label={() => <Text className="dark:text-white">{lesson.name}</Text>}
               onPress={() => router.push(`/course/${slug}/${lesson.lesson_index}`)}
               focused={isActive}
               icon={({ color, size }) =>
