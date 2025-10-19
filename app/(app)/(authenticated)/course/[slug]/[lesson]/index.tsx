@@ -203,7 +203,12 @@ if (!validLessonIndex) {
   return (
     <ScrollView 
       className="flex-1"
-      contentContainerStyle={{ flexGrow: 1 }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        flexShrink: 1,  // <= crucial for web to prevent oversizing
+        justifyContent: 'space-between', // pushes bottom button down if content is short
+      }}
+      style={{ flex: 1 }} // fills the parent height
       showsVerticalScrollIndicator={true}
     >
     {/* <View className="flex-1"> */}
@@ -247,7 +252,7 @@ if (!validLessonIndex) {
       </View>
       {hasNextLesson && (
         <TouchableOpacity
-          className="bg-primary py-3 flex-row items-center justify-center pb-safe gap-2"
+          className="bg-primary py-3 flex-row items-center justify-center gap-2"
           onPress={onHandleCompleteLesson}>
           <Text className="text-center text-white font-medium">Complete & Next Lesson</Text>
           <Ionicons name="arrow-forward" size={24} color="white" />
@@ -255,7 +260,7 @@ if (!validLessonIndex) {
       )}
       {!hasNextLesson && (
         <TouchableOpacity
-          className="bg-primary py-3 flex-row items-center justify-center pb-safe gap-2"
+          className="bg-primary py-3 flex-row items-center justify-center gap-2"
           onPress={onEndCourse}>
           <Text className="text-center text-white font-medium">Complete Course</Text>
           <Ionicons name="checkmark-circle-outline" size={24} color="white" />

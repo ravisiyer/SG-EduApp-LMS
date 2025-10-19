@@ -114,7 +114,7 @@ const Page = () => {
       </View>
 
       <TouchableOpacity
-        className="bg-primary py-3 flex-row items-center justify-center pb-safe gap-2"
+        className="bg-primary py-3 flex-row items-center justify-center gap-2"
         onPress={() => router.push(`/course/${course.slug}/1`)}>
         <Text className="text-center text-white font-medium">Start Course</Text>
         <Ionicons name="arrow-forward" size={24} color="white" />
