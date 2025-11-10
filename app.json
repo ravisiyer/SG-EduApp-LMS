@@ -23,7 +23,12 @@
     "web": {
       "bundler": "metro",
       "output": "server",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "display": "standalone",
+      "themeColor": "#0d6c9a",
+      "backgroundColor": "#ffffff",
+      "shortName": "LMS",
+      "startUrl": "."
     },
     "plugins": [
       [
