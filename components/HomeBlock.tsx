@@ -13,7 +13,7 @@ export default function HomeBlock({
 }: {
   homeInfo: HomeInfo;
   colorScheme: 'light' | 'dark';
-  dom: import('expo/dom').DOMProps;
+  // dom: import('expo/dom').DOMProps;
 }) {
   const blockContent = homeInfo?.content;
 

@@ -36,8 +36,6 @@ function CustomDrawerContent(props: any) {
 
   if (!lessons) {
     return <Text className="text-black dark:text-white">Loading...</Text>;
-    // return <Text style={{ color: colorScheme === 'dark' ? '#fff' : '#000' }}>Loading...</Text>;
-    // return <Text>Loading...</Text>;
   }
 
   return (
