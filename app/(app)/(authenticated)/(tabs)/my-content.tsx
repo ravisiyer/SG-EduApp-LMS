@@ -5,18 +5,26 @@ import { View, Text, TouchableOpacity, Platform, ScrollView } from 'react-native
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import CourseCard from '@/components/CourseCard';
+import LoadingView from '@/components/LoadingView';
 
 export default function HomeScreen() {
   const { getUserCourses } = useStrapi();
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['userCourses'],
     queryFn: () => getUserCourses(),
     // refetchOnMount: 'always', // Band-aid fix but now not needed as underlying race condition issue is fixed.
   });
 
+  if (isLoading) {
+    return <LoadingView />
+  }
+
   return (
     <View className="flex-1 web:max-w-[1200px] web:mx-auto">
       {data?.length === 0 && (
+      // {data?.length === 0 && return ( ....
+      // Above suggested mod (by CG) will optimize code as the next block code (Platform.OS related) need not be executed
+      // Not implementing it to avoid testing work now. Can do it later on when needed.
         <View className="flex-1 gap-4 items-center justify-center">
           <Text className="text-center text-lg  dark:text-white">
             You don't have any courses yet.

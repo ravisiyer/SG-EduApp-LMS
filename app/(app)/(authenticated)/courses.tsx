@@ -3,14 +3,19 @@ import { useQuery } from '@tanstack/react-query';
 import { useStrapi } from '@/providers/StrapiProvider';
 import CourseCard from '@/components/CourseCard';
 import Animated, { FadeIn } from 'react-native-reanimated';
+import LoadingView from '@/components/LoadingView';
 
 const Page = () => {
   const { getCourses } = useStrapi();
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['courses'],
     queryFn: () => getCourses(),
   });
 
+  if (isLoading) {
+    return <LoadingView />
+  }
+    
   return (
     <View className="flex-1 px-4">
       {Platform.OS === 'web' ? (
