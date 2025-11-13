@@ -16,7 +16,6 @@ function CustomDrawerContent(props: any) {
   const pathname = usePathname();
   const colorScheme = useColorScheme();
 
-  // ✅ Get the passed prop instead of recalculating
   const { isMobileWebLandscape } = props;
 
   const { data: lessons } = useQuery({
@@ -40,7 +39,6 @@ function CustomDrawerContent(props: any) {
 
   return (
     <View className="flex-1 py-safe">
-      {/* ✅ Hide top image when in mobile landscape */}
       {!isMobileWebLandscape && (
         <Image
           source={require('@/assets/images/yoga.png')}
@@ -52,18 +50,11 @@ function CustomDrawerContent(props: any) {
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
         <Text className="text-2xl font-bold p-4 text-black dark:text-white" >Lessons</Text>
-        {/* <Text className="text-2xl font-bold p-4" style={{ color: colorScheme === 'dark' ? '#fff' : '#000' }}>Lessons</Text> */}
         {lessons.map((lesson) => {
           const isActive = pathname === `/course/${slug}/${lesson.lesson_index}`;
           return (
             <DrawerItem
               key={lesson.lesson_index}
-              // ref={isActive ? activeLessonRef : null} // active lesson gets the ref
-              // label={() => (
-              //   <View ref={isActive ? activeLessonRef : null}>
-              //     <Text className="dark:text-white">{lesson.name}</Text>
-              //   </View>
-              // )}
               label={() => {
                 if (Platform.OS === 'web') {
                   // Use a plain div for web to attach ref
@@ -81,7 +72,6 @@ function CustomDrawerContent(props: any) {
                   );
                 }
               }}              
-              // label={() => <Text className="dark:text-white">{lesson.name}</Text>}
               onPress={() => router.push(`/course/${slug}/${lesson.lesson_index}`)}
               focused={isActive}
               icon={({ color, size }) =>
@@ -99,7 +89,6 @@ function CustomDrawerContent(props: any) {
           className="flex-row items-center gap-2 p-4 pt-12">
           <Ionicons name="arrow-back" size={24} color={colorScheme === 'dark' ? '#fff' : '#000'} />
           <Text className="text-sm text-black dark:text-white">Back to my Content</Text>
-          {/* <Text className="text-sm" style={{ color: colorScheme === 'dark' ? '#fff' : '#000' }}>Back to my Content</Text> */}
         </TouchableOpacity>
       </DrawerContentScrollView>
 
@@ -118,9 +107,7 @@ const Layout = () => {
     dimensions.height < MOBILE_LANDSCAPE_MAX_HEIGHT;
 
   return (
-    // <View><Text>Placeholder for Drawer</Text></View>
     <Drawer
-      // ✅ Pass as prop here
       drawerContent={(props) => <CustomDrawerContent {...props} isMobileWebLandscape={isMobileWebLandscape} />}
       screenOptions={{
         drawerActiveTintColor: '#0d6c9a',
@@ -135,17 +122,9 @@ const Layout = () => {
         name="overview"
         options={{
           title: 'Course Overview',
-          // drawerIcon: () => (
-          //   <Ionicons name="book-outline" />
-          // ),
         drawerIcon: isMobileWebLandscape
           ? undefined
           : ({ color, size }) => <Ionicons name="book-outline" size={size} color={color} />,
-          // drawerIcon: ({ color, size }) => (
-          //   isMobileWebLandscape
-          //     ? (undefined)
-          //     : (<Ionicons name="book-outline" size={size} color={color} />) 
-          // ),
         }}
       />
       <Drawer.Screen

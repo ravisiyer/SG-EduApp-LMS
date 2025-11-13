@@ -80,7 +80,6 @@ const Page = () => {
   }
 
   const onStartCourse = async () => {
-    // console.log("Entered onStartCourse");
     if (hasCourse) {
       // User already has course access, redirect to overview page
       router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
@@ -93,7 +92,6 @@ const Page = () => {
           return;
         }
         const result = await purchaseWebPackage!(productPackage!);
-        // console.log("result from purchaseWebPackage:",result);
 
         const activeEntitlements = result?.customerInfo.entitlements.active;
         if (activeEntitlements) {
@@ -139,7 +137,6 @@ const Page = () => {
       }
     }
   };
-  // console.log("productPackage:",productPackage)
   return (
     <Animated.ScrollView
       entering={FadeIn}

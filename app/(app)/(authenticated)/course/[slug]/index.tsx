@@ -76,7 +76,6 @@ const Page = () => {
   }
 
   const onStartCourse = async () => {
-    // console.log("Entered onStartCourse");
     if (hasCourse) {
       router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
     } else {

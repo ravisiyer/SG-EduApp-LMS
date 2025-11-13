@@ -57,7 +57,6 @@ const Page = () => {
   useEffect(() => {
     if (!lesson || !lessons) return;
 
-    // console.log("In useEffect for updating course progress. externalNavigationRef.current =", externalNavigationRef .current);
     // Only update when navigation is external (not from local router.push)
     if (!externalNavigationRef .current) {
       externalNavigationRef .current = true;
@@ -73,7 +72,6 @@ const Page = () => {
   }, [lesson, lessons, lessonIndex, queryClient]);
 
   const onHandleCompleteLesson = () => {
-    // console.log("Entered onHandleCompleteLesson");
     if (!lesson) return; // <- guard for TypeScript
 
     if (!hasNextLesson) {
@@ -83,12 +81,6 @@ const Page = () => {
 
     const progress = Math.floor((parseInt(lessonIndex) / (lessons?.length || 0)) * 100);
 
-    // console.log("Invoking markLessonAsCompleted with:", {
-    //   lessonId: lesson.documentId,
-    //   courseId: lesson.course.documentId,
-    //   progress,
-    //   nextLessonIndex: parseInt(lessonIndex) + 1
-    // });
     (async () => {
       await markLessonAsCompleted(
         lesson.documentId,
@@ -115,7 +107,6 @@ const Page = () => {
       // console.log('In playToEnd event handler. Ignoring spurious playToEnd event during mount');
       return;
     }
-    // console.log("isMounted is true in playToEnd event handler. Will now invoke onHandleCompleteLesson.");
     onHandleCompleteLesson();
   });
 
@@ -154,23 +145,15 @@ if (!validLessonIndex) {
 
   if (lesson?.video) {
     if (lastLessonIndexRef.current !== lessonIndex) {
-      // console.log("Replacing video in player for lessonIndex", lessonIndex);
-      // if (Platform.OS === 'web') {
-      // // Only mutes the audio; Does not autoplay on web
-      //   player.muted = true; 
-      // }
       player.replace(lesson.video);
       // player.play(); // Does not autoplay on web; Not needed for Android
         // see [expo-video] Autoplay doesn't work for video on Web #36350, 
         // https://github.com/expo/expo/issues/36350
       lastLessonIndexRef.current = lessonIndex;
     } else {
-      // Optional debug log:
       // console.log("Skipping replace, same lessonIndex", lessonIndex);
     }
   }
-  // player.replace(lesson.video);
-
   // Automatically play the video in production
   // if (!__DEV__) {
   //   player.play();
@@ -186,7 +169,6 @@ if (!validLessonIndex) {
     setTimeout(() => {
       router.replace(`/my-content`);
     }, Platform.OS === "web" ? 0 : 4000);
-    // }, 4000);
   };
 
   const hasNotes =
@@ -202,7 +184,6 @@ if (!validLessonIndex) {
 
   return (
     <ScrollView 
-      // className="flex-1"
       contentContainerStyle={{
         flexGrow: 1,
         flexShrink: 1,  // <= crucial for web to prevent oversizing
@@ -211,7 +192,6 @@ if (!validLessonIndex) {
       style={{ flex: 1 }} // fills the parent height
       showsVerticalScrollIndicator={true}
     >
-    {/* <View className="flex-1"> */}
       {Platform.OS !== 'web' && (
         <Confetti
           ref={confettiRef}
@@ -232,12 +212,6 @@ if (!validLessonIndex) {
         contentFit="contain"
       />
 
-      {/* <View className="flex-1 p-4 min-h-[100px]">
-        <RichtTextContent 
-          colorScheme={colorScheme}
-          blockContent={lesson.notes} 
-        />
-      </View> */}
       <View className="flex-1 p-4 min-h-[100px]">
         {hasNotes ? (
           <RichtTextContent 
@@ -267,7 +241,6 @@ if (!validLessonIndex) {
         </TouchableOpacity>
       )}
     </ScrollView>
-    // </View>
   );
 };
 export default Page;

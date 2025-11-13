@@ -17,7 +17,6 @@ function AppHeader() {
         <Link href="/" 
         className={`text-primary dark:text-white ${isMobileWebLandscape ? '' : 'xs:font-bold xs:text-xl' }`}
         >
-        {/* <Link href="/" className="xs:font-bold xs:text-xl text-primary dark:text-white"> */}
           <Text>
             <Text>My Studio</Text>
           </Text>

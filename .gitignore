@@ -3,6 +3,7 @@
 .env.*
 **gem.txt
 assets
+testcode
 
 # dependencies
 node_modules/

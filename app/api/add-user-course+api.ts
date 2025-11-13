@@ -1,7 +1,6 @@
 const TOKEN = process.env.STRAPI_API_ADMIN_TOKEN;
 
 export async function POST(request: Request) {
-  // console.log("Entered add-user-course API");
   try {
     const { courseId, clerkId } = await request.json();
 

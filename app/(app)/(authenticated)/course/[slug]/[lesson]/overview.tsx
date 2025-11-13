@@ -106,10 +106,6 @@ const Page = () => {
               No description for this course.
             </Text>
           )}
-          {/* <RichtTextContent 
-            colorScheme={colorScheme}
-            blockContent={course.description} 
-          /> */}
         </View>
       </View>
 

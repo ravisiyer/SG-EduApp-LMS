@@ -14,7 +14,6 @@ const RichtTextContent = ({
   }) => {
   return (
     <View className={`flex-1 ${colorScheme === 'dark' ? 'bg-black text-white' : 'bg-white text-gray-800'}`}>
-    {/* <View className="flex-1"> */}
       <BlocksRenderer content={blockContent} />
     </View>
   );
