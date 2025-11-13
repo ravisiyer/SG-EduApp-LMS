@@ -1,10 +1,14 @@
 # Slightly Modified Version of Simon Grimm's Tutorial: React Native LMS with Strapi, Clerk & RevenueCat
 
-This is a slightly modified version of Simon Grimm's React Native LMS with Strapi, Clerk & RevenueCat Tutorial App frontend code. Here is [the original app frontend code published by Simon Grimm](https://github.com/Galaxies-dev/lms-react-native). The Readme of the above repo has a [Demo section](https://github.com/Galaxies-dev/lms-react-native?tab=readme-ov-file#demo) with animated demos of the mobile app, followed by mobile app screenshots and web app screenshots. That's followed by Strapi screenshots showing how the course content is organized and specified at the Strapi backend using Strapi admin panel. 
+This is a slightly modified version of the frontend repository of Simon Grimm's tutorial project on React Native LMS with Strapi, Clerk & RevenueCat.  
+
+Here is [the original app frontend code published by Simon Grimm](https://github.com/Galaxies-dev/lms-react-native).  
+
+The Readme of the above repo has a [Demo section](https://github.com/Galaxies-dev/lms-react-native?tab=readme-ov-file#demo) with animated demos of the mobile app, followed by mobile app screenshots and web app screenshots. That's followed by Strapi screenshots showing how the course content is organized and specified at the Strapi backend using Strapi admin panel. 
 
 Simon Grimm kindly permitted me (over email on 13 Nov. 2025) to publish this slightly modified version of his app frontend code. 
 
-I think this modified repository's code should work with the same Strapi backend used by Simon Grimm's original repo. I made some minor superficial changes to the original backend code but I think those changes do not affect functionality of the backend. 
+I think this modified repository's code should work with the same Strapi backend used by Simon Grimm's original repo. I made some minor superficial changes to the original backend project but I think those changes do not affect functionality of the backend. 
 
 ## Tutorial App Features
 This tutorial app teaches how to develop a small LMS app which:
@@ -34,7 +38,9 @@ I removed the Apple login as I don't use Apple devices. So the app currently sup
 ## Deployment of Modified Tutorial App
 I am using Strapi cloud free tier for hosting the API backend whose runtime behavior is 'Cold start'. This causes the first Strapi data request for both the web app and Android app to often take as long as around a minute to complete. Subsequent requests don't take so long. In a production app whose API backend is hosted on paid Strapi cloud or AWS/Azure, the runtime behaviour would be 'Always on' and so even the first Strapi data request will complete quickly.
 
-Modified tutorial web app is hosted on expo.dev: https://sg-eduapp-lms--excmsr0i6w.expo.app/ . The web app can be viewed on mobile too, though the Android app on mobile has better UI/UX. Some of my mods improved web app rendering on mobile. 
+Modified tutorial web app is hosted on expo.dev: https://sg-eduapp-lms.expo.app/ .  
+
+The web app can be viewed on mobile too, though the Android app on mobile has better UI/UX. Some of my mods improved web app rendering on mobile. 
 
 I plan to do a production build of the Android app and share the APK on Google Drive.
 
