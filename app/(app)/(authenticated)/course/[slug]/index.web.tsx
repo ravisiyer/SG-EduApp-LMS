@@ -124,7 +124,10 @@ const Page = () => {
               const addCourseResult = await addUserToCourse(course.documentId.toString());
               if (addCourseResult) {
                 router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
-
+                // Original tutorial code had an issue if user closed the toast instead of 
+                // click on the Start Course button. Then user remained on this screen which was
+                // odd. So I simply am taking user to course overview directly.
+                
                 // Below toast flashes briefly and so chose to directly go to course overview screen
                 // If toast is necessary, timeout period will have to be experimented with.
                 // toast('Thanks for your purchase. You can now start the course!');
@@ -150,7 +153,8 @@ const Page = () => {
           // Free course, add user to course
           const result = await addUserToCourse(course.documentId.toString());
           if (result) {
-            router.replace('/my-content');
+            router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
+            // router.replace('/my-content');
           }
         }
       }

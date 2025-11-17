@@ -111,30 +111,39 @@ const Page = () => {
           setIsProcessing(false);
           return;
         }
-
+        // Code below has not been tested as I do not have Android or iOS app in RevenueCat
+        // But I made few changes from original tutorial code to keep it in sync with web version
         const purchaseResult = await purchasePackage!(productPackage!);
         if (purchaseResult.productIdentifier === course.revenuecatId) {
           const result = await addUserToCourse(course.documentId.toString());
           if (result) {
-            Alert.alert('Course purchased', 'You can now start the course', [
-              {
-                text: 'Start now',
-                onPress: () =>
-                  // Below line added and next line commented
-                  // to keep in sync with SG Video at https://youtu.be/fO3D8lNs10c?t=11285
-                  // SG video encloses this part in curly braces
-                  // router.replace('/my-content'),
-                  router.replace(
-                    `/(app)/(authenticated)/course/${slug}/overview/overview`
-                  ),
-              },
-            ]);
+            router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
+
+            // Code below may have an issue if user closes the alert instead of 
+            // click on the 'Start now' button. The user will remain on this screen which will
+            // be odd. So I have added above code to simply take user to course overview directly.
+            // Alert.alert('Course purchased', 'You can now start the course', [
+            //   {
+            //     text: 'Start now',
+            //     onPress: () =>
+            //       router.replace(
+            //         `/(app)/(authenticated)/course/${slug}/overview/overview`
+            //       ),
+            //   },
+            // ]);
+          } else {
+            console.error(
+              "addUserToCourse failed for course.documentId: ",
+              course.documentId.toString()
+            );
+            Alert.alert("We could not add this course to your account. Please contact support.");
           }
         }
       } else {
         const result = await addUserToCourse(course.documentId.toString());
         if (result) {
-          router.replace('/my-content');
+          router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
+          // router.replace('/my-content');
         }
       }
     }
