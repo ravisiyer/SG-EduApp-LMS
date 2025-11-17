@@ -123,16 +123,14 @@ const Page = () => {
             if (hasMatch) {
               const addCourseResult = await addUserToCourse(course.documentId.toString());
               if (addCourseResult) {
-                toast('Thanks for your purchase. You can now start the course!', {
-                  action: {
-                    label: 'Start Course',
-                    onClick: () =>
-                    // Below line added and next line commented
-                    // to keep in sync with SG code
-                      // router.replace('/my-content'),
-                      router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
-                  },
-                });
+                router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
+
+                // Below toast flashes briefly and so chose to directly go to course overview screen
+                // If toast is necessary, timeout period will have to be experimented with.
+                // toast('Thanks for your purchase. You can now start the course!');
+                // setTimeout(() => {
+                //   router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
+                // }, 600); // 600ms delay
               } else {
                 console.error(
                   "addUserToCourse failed for course.documentId: ",
