@@ -10,11 +10,11 @@ import Animated, {
   interpolate,
   FadeIn,
 } from 'react-native-reanimated';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRevenueCat } from '@/providers/RevenueCatProvider';
+import { Toaster, toast } from 'sonner';
 const HEADER_HEIGHT = 200; // Increased height for better parallax effect
 const HEADER_SCALE = 1.8; // Maximum scale for the parallax effect
-import { Toaster, toast } from 'sonner';
 
 const Page = () => {
   const colorScheme = useColorScheme() as 'light' | 'dark';
@@ -23,6 +23,8 @@ const Page = () => {
   const { width: windowWidth } = useWindowDimensions();
   const scrollY = useSharedValue(0);
   const [hasCourse, setHasCourse] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false); 
+
   const { webPackages, purchaseWebPackage } = useRevenueCat();
 
   const { data: course, isLoading } = useQuery({
@@ -33,6 +35,19 @@ const Page = () => {
   const productPackage = webPackages?.find(
     (pkg) => pkg.webBillingProduct.identifier === course?.revenuecatId
   );
+
+  // Check if user has course access
+  useEffect(() => {
+    let cancelled = false;
+    if (course) {
+      userHasCourse(course.documentId.toString()).then((result) => {
+        if (!cancelled) setHasCourse(result);
+      });
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [course]);
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -72,69 +87,77 @@ const Page = () => {
         <Text>Course not found</Text>
       </View>
     );
-  } else {
-    // Check if user has course access already
-    userHasCourse(course.documentId.toString()).then((result) => {
-      setHasCourse(result);
-    });
-  }
+  } 
+  // else {
+  //   // Check if user has course access already
+  //   userHasCourse(course.documentId.toString()).then((result) => {
+  //     setHasCourse(result);
+  //   });
+  // }
 
   const onStartCourse = async () => {
-    if (hasCourse) {
-      // User already has course access, redirect to overview page
-      router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
-    } else {
-      if (course.isPremium) {
-        // Premium course, needs to be purchased
-        // Below lines of code handle case of no web app in RevenueCat
-        if (!productPackage) {
-          toast('This course is not available for purchase on Web');
-          return;
-        }
-        const result = await purchaseWebPackage!(productPackage!);
+    if (!course || isProcessing) return; // prevent double clicks
+    setIsProcessing(true);
 
-        const activeEntitlements = result?.customerInfo.entitlements.active;
-        if (activeEntitlements) {
-          const hasMatch = Object.values(activeEntitlements).some(
-            (activeEntitlement: any) =>
-              activeEntitlement.productIdentifier === productPackage.webBillingProduct.identifier
-          );
+    try {
+      if (hasCourse) {
+        // User already has course access, redirect to overview page
+        router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
+      } else {
+        if (course.isPremium) {
+          // Premium course, needs to be purchased
+          // Below lines of code handle case of no web app in RevenueCat
+          if (!productPackage) {
+            toast('This course is not available for purchase on Web');
+            return;
+          }
+          const result = await purchaseWebPackage!(productPackage!);
 
-          if (hasMatch) {
-            const addCourseResult = await addUserToCourse(course.documentId.toString());
-            if (addCourseResult) {
-              toast('Thanks for your purchase. You can now start the course!', {
-                action: {
-                  label: 'Start Course',
-                  onClick: () =>
-                  // Below line added and next line commented
-                  // to keep in sync with SG code
-                    // router.replace('/my-content'),
-                    router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
-                },
-              });
+          const activeEntitlements = result?.customerInfo.entitlements.active;
+          if (activeEntitlements) {
+            const hasMatch = Object.values(activeEntitlements).some(
+              (activeEntitlement: any) =>
+                activeEntitlement.productIdentifier === productPackage.webBillingProduct.identifier
+            );
+
+            if (hasMatch) {
+              const addCourseResult = await addUserToCourse(course.documentId.toString());
+              if (addCourseResult) {
+                toast('Thanks for your purchase. You can now start the course!', {
+                  action: {
+                    label: 'Start Course',
+                    onClick: () =>
+                    // Below line added and next line commented
+                    // to keep in sync with SG code
+                      // router.replace('/my-content'),
+                      router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
+                  },
+                });
+              } else {
+                console.error(
+                  "addUserToCourse failed for course.documentId: ",
+                  course.documentId.toString()
+                );
+                toast.error("We could not add this course to your account. Please contact support.");
+              }
             } else {
               console.error(
-                "addUserToCourse failed for course.documentId: ",
-                course.documentId.toString()
+                "Purchase succeeded but no matching entitlement found for product:",
+                productPackage.webBillingProduct.identifier
               );
-              toast.error("We could not add this course to your account. Please contact support.");
+              toast.error("Purchase successful but course not unlocked. Please contact support.");
             }
-          } else {
-            console.error(
-              "Purchase succeeded but no matching entitlement found for product:",
-              productPackage.webBillingProduct.identifier
-            );
-            toast.error("Purchase successful but course not unlocked. Please contact support.");
+          }
+        } else {
+          // Free course, add user to course
+          const result = await addUserToCourse(course.documentId.toString());
+          if (result) {
+            router.replace('/my-content');
           }
         }
-      } else {
-        // Free course, add user to course
-        const result = await addUserToCourse(course.documentId.toString());
-        if (result) {
-          router.replace('/my-content');
-        }
       }
+    } finally {
+      setIsProcessing(false);
     }
   };
   return (
@@ -167,7 +190,13 @@ const Page = () => {
 
         <Pressable
           onPress={onStartCourse}
-          className="mt-4 bg-blue-500 rounded-lg py-3 items-center max-w-sm ">
+          disabled={isProcessing}
+          className={`mt-4 rounded-lg py-3 items-center max-w-sm
+            ${isProcessing ? 'bg-blue-300' : 'bg-blue-500'}`}
+        >
+          {isProcessing ? (
+            <ActivityIndicator color="white" />
+          ) : (
           <Text className="text-white font-semibold text-lg">
             {
               hasCourse
@@ -183,6 +212,7 @@ const Page = () => {
                   )
             }
           </Text>
+          )}
         </Pressable>
 
         <View className="py-4">

@@ -2,6 +2,7 @@ import { Course, Lesson, HomeInfo, StrapiUser, UserCourses } from '@/types/inter
 import { createContext, useContext, ReactNode } from 'react';
 import { useUser } from '@clerk/clerk-expo';
 import { useQueryClient } from '@tanstack/react-query';
+import { Alert, Platform } from 'react-native';
 
 // Define the context type
 interface StrapiContextType {
@@ -220,7 +221,21 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
         clerkId: user?.id,
       };
 
-      const response = await fetch(`/api/add-user-course`, {
+      let API_BASE = ''; // relative for web + all dev builds; Below override for native production builds
+      if (!(__DEV__) && Platform.OS !== 'web'){
+        if (!process.env.EXPO_PUBLIC_WEB_API_URL) {
+          Alert.alert(
+            "Configuration Error",
+            "EXPO_PUBLIC_WEB_API_URL is missing. It has to be defined for Native production build"
+          );
+          throw new Error("EXPO_PUBLIC_WEB_API_URL is not defined. It has to be defined for Native production build.");
+        }
+        API_BASE = process.env.EXPO_PUBLIC_WEB_API_URL;
+      }
+
+      const url = `${API_BASE}/api/add-user-course`;
+
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
