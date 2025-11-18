@@ -86,12 +86,6 @@ const Page = () => {
       </View>
     );
   }
-  //  else {
-  //   // Check if user has course access already
-  //   userHasCourse(course.documentId.toString()).then((result) => {
-  //     setHasCourse(result);
-  //   });
-  // }
 
   const onStartCourse = async () => {
   if (isProcessing) return;      // existing call still running
@@ -143,7 +137,6 @@ const Page = () => {
         const result = await addUserToCourse(course.documentId.toString());
         if (result) {
           router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
-          // router.replace('/my-content');
         }
       }
     }
@@ -151,42 +144,6 @@ const Page = () => {
     setIsProcessing(false);
   }
 };
-
-  // const onStartCourse = async () => {
-  //   if (hasCourse) {
-  //     router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
-  //   } else {
-  //     if (course.isPremium) {
-  //       // Below lines of code handle case of no Android or iOS app in RevenueCat
-  //       if (!productPackage) {
-  //         Alert.alert('Purchase not available', `This course is not available for purchase on ${Platform.OS}`);
-  //         return;
-  //       }
-  //       const result = await purchasePackage!(productPackage!);
-  //       if (result.productIdentifier === course.revenuecatId) {
-  //         const result = await addUserToCourse(course.documentId.toString());
-  //         if (result) {
-  //           Alert.alert('Course purchased', 'You can now start the course', [
-  //             {
-  //               text: 'Start now',
-  //               onPress: () =>
-  //                 // Below line added and next line commented
-  //                 // to keep in sync with SG Video at https://youtu.be/fO3D8lNs10c?t=11285
-  //                 // SG video encloses this part in curly braces
-  //                 // router.replace('/my-content'),
-  //                 router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`),
-  //             },
-  //           ]);
-  //         }
-  //       }
-  //     } else {
-  //       const result = await addUserToCourse(course.documentId.toString());
-  //       if (result) {
-  //         router.replace('/my-content');
-  //       }
-  //     }
-  //   }
-  // };
 
   return (
     <Animated.ScrollView
@@ -245,55 +202,6 @@ const Page = () => {
             </Text>
           )}
         </TouchableOpacity>
-
-        {/* <Pressable
-          onPress={onStartCourse}
-          disabled={isProcessing}
-          className={`mt-4 rounded-lg py-3 items-center
-            ${isProcessing ? 'bg-blue-300' : 'bg-blue-500'}`}
-        >
-          {isProcessing ? (
-            <ActivityIndicator color="white" />
-          ) : (
-            <Text className="text-white font-semibold text-lg">
-              {
-                hasCourse
-                  ? 'Continue Course'
-                  : (
-                      course.isPremium
-                        ? (
-                            productPackage
-                              ? `Purchase Course for ${productPackage?.product.priceString}`
-                              : `Purchase not available for ${Platform.OS}`
-                          )
-                        : 'Start Course'
-                    )
-              }
-            </Text>
-          )}
-        </Pressable> */}
-
-      {/* 
-        <Pressable
-          onPress={onStartCourse}
-          className="mt-4 bg-blue-500 rounded-lg py-3 items-center">
-          <Text className="text-white font-semibold text-lg">
-            {
-              hasCourse
-                ? 'Continue Course'
-                : (
-                    course.isPremium
-                      ? (
-                          productPackage
-                            ? `Purchase Course for ${productPackage?.product.priceString}`
-                            : `Purchase not available for ${Platform.OS}`
-                        )
-                      : 'Start Course'
-                  )
-            }
-          </Text>
-        </Pressable>
-        */}
 
         <View className="my-4">
           <RichtTextContent

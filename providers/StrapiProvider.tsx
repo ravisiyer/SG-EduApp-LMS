@@ -317,7 +317,6 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
       await queryClient.invalidateQueries({ queryKey: ['userCourses'] });
 
       return;
-      // return response.json();
     } catch (error) {
       throw error;
     }
@@ -365,7 +364,6 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
       }
 
       await response.body?.cancel(); // discard body efficiently      
-      // return response.json();
     } catch (error) {
       throw error;
     }

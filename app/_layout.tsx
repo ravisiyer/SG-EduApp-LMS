@@ -12,6 +12,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useReactQueryDevTools } from '@dev-plugins/react-query';
 import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 if (!publishableKey) {
@@ -83,18 +84,23 @@ export default function RootLayout() {
       publishableKey={publishableKey}
       waitlistUrl="/soon"
       >
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <ClerkLoaded>
-          <QueryClientProvider client={queryClient}>
-            <StrapiProvider>
-              <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-                <InitialLayout />
-              </ThemeProvider>
-            </StrapiProvider>
-          </QueryClientProvider>
-        </ClerkLoaded>
-      </GestureHandlerRootView>
+      <SafeAreaProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <ClerkLoaded>
+            <QueryClientProvider client={queryClient}>
+              <StrapiProvider>
+                <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                  <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+                  {/* Safe area for top-level content */}
+                  <SafeAreaView style={{ flex: 1 }} edges={['bottom', 'left', 'right']}>
+                    <InitialLayout />
+                  </SafeAreaView>
+                </ThemeProvider>
+              </StrapiProvider>
+            </QueryClientProvider>
+          </ClerkLoaded>
+        </GestureHandlerRootView>
+      </SafeAreaProvider>
     </ClerkProvider>
   )
 }

@@ -88,12 +88,6 @@ const Page = () => {
       </View>
     );
   } 
-  // else {
-  //   // Check if user has course access already
-  //   userHasCourse(course.documentId.toString()).then((result) => {
-  //     setHasCourse(result);
-  //   });
-  // }
 
   const onStartCourse = async () => {
     if (!course || isProcessing) return; // prevent double clicks
@@ -154,7 +148,6 @@ const Page = () => {
           const result = await addUserToCourse(course.documentId.toString());
           if (result) {
             router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
-            // router.replace('/my-content');
           }
         }
       }
