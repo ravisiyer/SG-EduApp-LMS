@@ -63,7 +63,7 @@ const InitialLayout = () => {
   }, [isLoaded, isSignedIn, loaded]);
 
   if (!isLoaded || !loaded) {
-    return <ActivityIndicator />;
+    return <ActivityIndicator size="large" />;
   }
 
   return (

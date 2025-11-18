@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Confetti, ConfettiMethods } from 'react-native-fast-confetti';
 import { useEffect, useRef, useState } from 'react';
 import { MOBILE_LANDSCAPE_MAX_HEIGHT } from '@/constants';
+import LoadingView from '@/components/LoadingView';
 
 const Page = () => {
   const colorScheme = useColorScheme() as 'light' | 'dark';
@@ -112,11 +113,7 @@ const Page = () => {
 
   // Rendering
   if (lessonsLoading) {
-    return (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator color="#0d6c9a" />
-      </View>
-    );
+    return (<LoadingView innerScreen={true} />);
   }
 
 if (!validLessonIndex) {
@@ -136,11 +133,7 @@ if (!validLessonIndex) {
 }
 
   if (!lesson) {
-    return (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator color="#0d6c9a" />
-      </View>
-    );
+    return (<LoadingView innerScreen={true} />);
   }
 
   if (lesson?.video) {

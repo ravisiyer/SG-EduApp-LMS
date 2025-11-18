@@ -41,7 +41,7 @@ export default function SoonWeb() {
         }}
         afterJoinWaitlistUrl="/wait"
         signInUrl="/login"
-        fallback={<ActivityIndicator />}
+        fallback={<ActivityIndicator size="large" />}
       />
     </View>
   );

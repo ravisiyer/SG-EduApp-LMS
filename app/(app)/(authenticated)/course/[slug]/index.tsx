@@ -11,6 +11,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect, useState } from 'react';
 import { useRevenueCat } from '@/providers/RevenueCatProvider';
+import LoadingView from '@/components/LoadingView';
 const HEADER_HEIGHT = 200; // Increased height for better parallax effect
 const HEADER_SCALE = 1.8; // Maximum scale for the parallax effect
 
@@ -72,11 +73,7 @@ const Page = () => {
   });
 
   if (isLoading) {
-    return (
-      <View className="flex-1 items-center justify-center mt-10">
-        <ActivityIndicator color="#0d6c9a" />
-      </View>
-    );
+    return (<LoadingView innerScreen={true} />);
   }
 
   if (!course) {

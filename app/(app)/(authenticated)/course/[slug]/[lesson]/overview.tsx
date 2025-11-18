@@ -11,6 +11,7 @@ import Animated, {
   FadeIn,
 } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
+import LoadingView from '@/components/LoadingView';
 
 const HEADER_HEIGHT = 200;
 const HEADER_SCALE = 1.8;
@@ -53,11 +54,7 @@ const Page = () => {
   });
 
   if (isLoading) {
-    return (
-      <View className="flex-1 items-center justify-center mt-10">
-        <ActivityIndicator color="#0d6c9a" />
-      </View>
-    );
+    return (<LoadingView innerScreen={true} />);
   }
 
   if (!course) {
