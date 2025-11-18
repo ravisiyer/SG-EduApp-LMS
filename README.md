@@ -44,9 +44,9 @@ The modified tutorial app's Android version is shared as an APK and the web vers
 
 I am using Strapi cloud free tier for hosting the API backend whose runtime behavior is 'Cold start'. This causes the first Strapi data request for both the web app and Android app to often take as long as around a minute to complete. Subsequent requests don't take so long. In a production app whose API backend is hosted on paid Strapi cloud or AWS/Azure, the runtime behaviour would be 'Always on' and so even the first Strapi data request will complete quickly.
 
-Modified tutorial Android release APK on Google Drive *[Note: 'Start Course' in production Android app is not working; Debugging issue now.]* (123 MB).  
+Modified tutorial [Android release APK on Google Drive](https://drive.google.com/file/d/1puPB7eKHJJ8BAlmaXd5ItDYPUo2EGmCY/view?usp=drive_link) (124 MB).  
 
-- This release APK has been scanned using VirusTotal. [The scan reported the APK file to be clean](https://www.virustotal.com/gui/file/f0006aced02b31bdcc33630882f927fcdfabcb502bf1d3bf20f54da20ea780bf) i.e. "No security vendors flagged this file as malicious".
+- ***IN-PROGRESS*** This release APK has been scanned using VirusTotal. The scan reported the APK file to be clean i.e. "No security vendors flagged this file as malicious".
 
 - I tested it both on my Android mobile and on Android emulator on my PC (downloaded APK from above link on emulator).  
 
