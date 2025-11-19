@@ -46,7 +46,7 @@ I am using Strapi cloud free tier for hosting the API backend whose runtime beha
 
 Modified tutorial [Android release APK on Google Drive](https://drive.google.com/file/d/1puPB7eKHJJ8BAlmaXd5ItDYPUo2EGmCY/view?usp=drive_link) (124 MB).  
 
-- ***IN-PROGRESS*** This release APK has been scanned using VirusTotal. The scan reported the APK file to be clean i.e. "No security vendors flagged this file as malicious".
+- This release APK has been scanned using VirusTotal. [The scan reported the APK file to be clean](https://www.virustotal.com/gui/file/b4d905b89943847cad75ba5a719fc40eeed31666f7aae0dbe1e042ccf2348342) i.e. "No security vendors flagged this file as malicious".
 
 - I tested it both on my Android mobile and on Android emulator on my PC (downloaded APK from above link on emulator).  
 
@@ -54,12 +54,13 @@ Modified tutorial web app is hosted on expo.dev: https://sg-eduapp-lms.expo.app/
 
 - The web app can be viewed on mobile too, though the Android app on mobile has better UI/UX. Some of my mods improved web app rendering on mobile. 
 
-### About payments for premium course
-The modified version Android app does not support in-app purchases as [RevenueCat supports Android in-app payments only via Google Play Billing](https://raviswdev.blogspot.com/2025/09/revenuecat-supports-android-in-app.html). I do not have a Google Play developer account as of now and so my modified version Android app does not support in-app purchases.
+## How to Use the App?
+Please see the starting Usage section of my post: [Usage and Testing of Interesting (SG) React Native Education (LMS) tutorial app (mobile and web) with public repos but not open source](https://raviswdev.blogspot.com/2025/11/usage-and-testing-of-interesting-sg.html). The Testing section can be skipped. It gives details of how I tested the app which may provide additional usage details for those interested in such details. 
 
-The modified version web app supports 'SANDBOX' in-app purchases. The payment screen in it is connected to a Stripe test mode setup through RevenueCat. You will see a yellow bar at the top of the payment screen with “SANDBOX” displayed in the center, indicating that the payment screen is a test-mode screen and not a real financial transaction screen. The test cards that can be used to simulate various payment cases like success and declined are given on [Stripe docs: Try it out](https://docs.stripe.com/checkout/quickstart#testing). 
+## Issues the App has
+The app does have some relatively minor issues, but as the app is a tutorial app used on free-tier Strapi Cloud backend, I think some such issues are perhaps to be expected. 
 
-Please don't use real credit/debit card numbers. I presume that even if real credit/debit card numbers are used, as Stripe test mode is being used in the web app, real debit transactions will not happen. There is no bank account associated with this Stripe test mode.
+These minor issues usually get fixed by closing and reopening the Android app or refreshing the web page. The open issues I have noticed are put up in my post: [Open Issues of Interesting (SG) React Native Education (LMS) tutorial app (mobile and web) with public repos but not open source](https://raviswdev.blogspot.com/2025/11/open-issues-of-interesting-sg-react.html).
 
 ## Tutorial App Notes Posts
 As notes for myself—and perhaps helpful to others—I have published several posts on the tutorial app. The latest post is [Notes on learning stage of developing my own React Native education app using Expo Framework - Part 6](https://raviswdev.blogspot.com/2025/11/notes-on-learning-stage-of-developing.html). These posts link to their previous and next posts.
