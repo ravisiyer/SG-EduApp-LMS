@@ -1,0 +1,19 @@
+import { View, Text } from 'react-native';
+import { BlocksContent, BlocksRenderer, Node } from '@strapi/blocks-react-renderer';
+
+const renderNode = (node) => {
+  switch (node.type) {
+    case 'paragraph':
+      return <Text>{node.children.map(renderNode)}</Text>;
+    case 'text':
+      return <Text>{node.text}</Text>;
+    case 'heading':
+      return <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{node.children.map(renderNode)}</Text>;
+    default:
+      return null;
+  }
+};
+
+export default function RichTextNative({ content } : {content: BlocksContent}) {
+  return <View>{content.map(renderNode)}</View>;
+}

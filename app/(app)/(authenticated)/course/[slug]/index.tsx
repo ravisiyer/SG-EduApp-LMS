@@ -172,10 +172,9 @@ const Page = () => {
       <View className="flex-1 px-4 pt-4 bg-white dark:bg-black">
         <Text className="text-2xl font-bold text-gray-800 dark:text-white">{course.title}</Text>
 
-        <TouchableOpacity
+        <Pressable
           onPress={onStartCourse}
           disabled={isProcessing}
-          activeOpacity={0.7}
           className={`mt-4 rounded-lg py-3 items-center
             ${isProcessing ? 'bg-blue-300' : 'bg-blue-500'}`}
         >
@@ -198,7 +197,7 @@ const Page = () => {
               }
             </Text>
           )}
-        </TouchableOpacity>
+        </Pressable>
 
         <View className="my-4">
           <RichtTextContent

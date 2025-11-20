@@ -207,10 +207,15 @@ if (!validLessonIndex) {
 
       <View className="flex-1 p-4 min-h-[100px]">
         {hasNotes ? (
-          <RichtTextContent 
-            colorScheme={colorScheme}
-            blockContent={lesson.notes} 
-          />
+          <>
+            <Text className="mt-2 text-black dark:text-white">
+              {JSON.stringify(lesson.notes)}
+            </Text>
+            <RichtTextContent 
+              colorScheme={colorScheme}
+              blockContent={lesson.notes} 
+            />
+          </>
         ) : (
           <Text className="text-center text-gray-500 dark:text-gray-400">
             No notes available for this lesson.
