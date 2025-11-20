@@ -2,7 +2,7 @@ import { View, Text, Pressable, ActivityIndicator, useWindowDimensions, useColor
 import { useLocalSearchParams, router } from 'expo-router';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { useQuery } from '@tanstack/react-query';
-import RichtTextContent from '@/components/RichtTextContent';
+// import RichtTextContent from '@/components/RichtTextContent';
 import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -14,6 +14,7 @@ import { useState, useEffect } from 'react';
 import { useRevenueCat } from '@/providers/RevenueCatProvider';
 import { Toaster, toast } from 'sonner';
 import LoadingView from '@/components/LoadingView';
+import StrapiBlocksRenderer from '@/components/StrapiBlocksRenderer';
 const HEADER_HEIGHT = 200; // Increased height for better parallax effect
 const HEADER_SCALE = 1.8; // Maximum scale for the parallax effect
 
@@ -208,7 +209,7 @@ const Page = () => {
         </Pressable>
 
         <View className="py-4">
-          <RichtTextContent
+          <StrapiBlocksRenderer
             colorScheme={colorScheme}
             blockContent={course.description}
           />

@@ -2,7 +2,7 @@ import { View, Text, ActivityIndicator, useWindowDimensions, TouchableOpacity, u
 import { router, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { useQuery } from '@tanstack/react-query';
-import RichtTextContent from '@/components/RichtTextContent';
+// import RichtTextContent from '@/components/RichtTextContent';
 import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -12,6 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import LoadingView from '@/components/LoadingView';
+import StrapiBlocksRenderer from '@/components/StrapiBlocksRenderer';
 
 const HEADER_HEIGHT = 200;
 const HEADER_SCALE = 1.8;
@@ -93,10 +94,10 @@ const Page = () => {
         <Text className="text-2xl font-bold text-gray-800 dark:text-white">{course.title}</Text>
         <View className="flex-1 py-4 min-h-[100px]">
           {course.description ? (
-            <RichtTextContent 
+            <StrapiBlocksRenderer 
               colorScheme={colorScheme}
               blockContent={course.description} 
-              dom={{ matchContents: true, scrollEnabled: false }}
+              // dom={{ matchContents: true, scrollEnabled: false }}
             />
           ) : (
             <Text className="text-center text-gray-500 dark:text-gray-400">

@@ -3,13 +3,14 @@ import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useStrapi } from '@/providers/StrapiProvider';
-import RichtTextContent from '@/components/RichtTextContent';
+// import RichtTextContent from '@/components/RichtTextContent';
 import { useEventListener } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import { Confetti, ConfettiMethods } from 'react-native-fast-confetti';
 import { useEffect, useRef, useState } from 'react';
 import { MOBILE_LANDSCAPE_MAX_HEIGHT } from '@/constants';
 import LoadingView from '@/components/LoadingView';
+import StrapiBlocksRenderer from '@/components/StrapiBlocksRenderer';
 
 const Page = () => {
   const colorScheme = useColorScheme() as 'light' | 'dark';
@@ -211,7 +212,7 @@ if (!validLessonIndex) {
             <Text className="mt-2 text-black dark:text-white">
               {JSON.stringify(lesson.notes)}
             </Text>
-            <RichtTextContent 
+            <StrapiBlocksRenderer  
               colorScheme={colorScheme}
               blockContent={lesson.notes} 
             />
