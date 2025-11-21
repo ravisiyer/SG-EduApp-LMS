@@ -1,13 +1,14 @@
 import { View, Text, Button, Image, ScrollView } from 'react-native';
 import { useAuth } from '@clerk/clerk-expo';
 import { useUser } from '@clerk/clerk-expo';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useStrapi } from '@/providers/StrapiProvider';
 
 const Page = () => {
   const { signOut } = useAuth();
   const { user } = useUser();
   const { getUserCourses, getUserCompletedLessons } = useStrapi();
+  const queryClient = useQueryClient();
 
   const { data: userCourses } = useQuery({
     queryKey: ['userCourses'],
@@ -18,6 +19,11 @@ const Page = () => {
     queryKey: ['userCompletedLessons'],
     queryFn: () => getUserCompletedLessons(),
   });
+
+  const handleSignOut = async () => {
+    await signOut();
+    queryClient.clear();     // or queryClient.removeQueries()
+  };
 
   return (
     // <View className="flex-1 bg-white p-4">
@@ -46,7 +52,8 @@ const Page = () => {
           </View>
         </View>
 
-        <Button title="Sign Out" onPress={() => signOut()} color="#FF3B30" />
+        <Button title="Sign Out" onPress={() => handleSignOut()} color="#FF3B30" />
+        {/* <Button title="Sign Out" onPress={() => signOut()} color="#FF3B30" /> */}
       </ScrollView>
     </View>
   );

@@ -53,7 +53,8 @@ const InitialLayout = () => {
   }, [loaded, isLoaded]);
 
   useEffect(() => {
-    if (!loaded) return;
+    // if (!loaded) return;
+    if (!loaded || !isLoaded) return;
 
     const inAuthGroup = segments[1] === '(authenticated)';
 
