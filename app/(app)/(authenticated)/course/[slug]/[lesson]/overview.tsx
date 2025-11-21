@@ -94,11 +94,16 @@ const Page = () => {
         <Text className="text-2xl font-bold text-gray-800 dark:text-white">{course.title}</Text>
         <View className="flex-1 py-4 min-h-[100px]">
           {course.description ? (
+            <>
+            {/* <Text className="mt-2 text-black dark:text-white">
+              {JSON.stringify(course.description)}
+            </Text> */}
             <StrapiBlocksRenderer 
               colorScheme={colorScheme}
               blockContent={course.description} 
               // dom={{ matchContents: true, scrollEnabled: false }}
             />
+            </>
           ) : (
             <Text className="text-center text-gray-500 dark:text-gray-400">
               No description for this course.

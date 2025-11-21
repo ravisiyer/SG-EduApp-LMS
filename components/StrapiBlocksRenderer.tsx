@@ -1,3 +1,5 @@
+// ChatGPT generated code. Am commenting out most of it leaving only required parts.
+
 import React from 'react';
 import {
   View,
@@ -20,21 +22,22 @@ import {
 type BlocksContent = any; // keep loose so it's tolerant of Strapi shapes
 
 const styles = StyleSheet.create({
-  container: { paddingVertical: 8 },
-  paragraph: { marginBottom: 8, lineHeight: 20 },
-  heading1: { fontSize: 22, fontWeight: '700', marginBottom: 8 },
-  heading2: { fontSize: 20, fontWeight: '700', marginBottom: 8 },
-  heading3: { fontSize: 18, fontWeight: '700', marginBottom: 6 },
-  listItem: { marginBottom: 4, paddingLeft: 12 },
-  quote: { padding: 12, borderLeftWidth: 4, borderLeftColor: '#ccc', backgroundColor: '#f8f8f8', marginBottom: 8 },
-  codeBlock: { fontFamily: 'monospace', backgroundColor: '#eee', padding: 8, borderRadius: 4, marginBottom: 8 },
-  image: { width: '100%', height: 180, resizeMode: 'cover', marginVertical: 8, borderRadius: 6 },
-  link: { color: '#007aff', textDecorationLine: 'underline' },
+  container: { paddingVertical: 0 },
+  // paragraph: { marginBottom: 16, lineHeight: 24 }, // text seems a little fuzzy
+  paragraph: { marginBottom: 16, lineHeight: 22 },
+  // heading1: { fontSize: 22, fontWeight: '700', marginBottom: 8 },
+  // heading2: { fontSize: 20, fontWeight: '700', marginBottom: 8 },
+  // heading3: { fontSize: 18, fontWeight: '700', marginBottom: 6 },
+  // listItem: { marginBottom: 4, paddingLeft: 12 },
+  // quote: { padding: 12, borderLeftWidth: 4, borderLeftColor: '#ccc', backgroundColor: '#f8f8f8', marginBottom: 8 },
+  // codeBlock: { fontFamily: 'monospace', backgroundColor: '#eee', padding: 8, borderRadius: 4, marginBottom: 8 },
+  // image: { width: '100%', height: 180, resizeMode: 'cover', marginVertical: 8, borderRadius: 6 },
+  // link: { color: '#007aff', textDecorationLine: 'underline' },
   unknown: { padding: 8, backgroundColor: '#fff3cd', borderRadius: 4, marginBottom: 8 },
 });
 
 /** Render inline spans with simple mark support: bold, italic, underline, link */
-const renderInline = (node: any, key: number | string) => {
+const renderInline = (node: any, key: number | string, colorScheme: 'light' | 'dark') => {
   // Many Strapi block formats use node.text and node.marks or node.type/attrs.
   const text = node?.text ?? (typeof node === 'string' ? node : '');
   const marks = node?.marks ?? node?.attributes ?? [];
@@ -43,26 +46,42 @@ const renderInline = (node: any, key: number | string) => {
   const isBold = marks?.some((m: any) => m === 'bold' || m?.type === 'bold');
   const isItalic = marks?.some((m: any) => m === 'italic' || m?.type === 'italic');
   const isUnderline = marks?.some((m: any) => m === 'underline' || m?.type === 'underline');
-  const link = marks?.find((m: any) => (m?.type === 'link') || (m?.href || m?.url));
+  // const link = marks?.find((m: any) => (m?.type === 'link') || (m?.href || m?.url));
 
   const textStyle: any = {};
   if (isBold) textStyle.fontWeight = '700';
   if (isItalic) textStyle.fontStyle = 'italic';
   if (isUnderline) textStyle.textDecorationLine = 'underline';
+  // Default font size seems to be 14 in RN for <Text>
+  // As per CG, "BlocksRenderer renders text at roughly fontSize: 16–18 (depending on platform)."
+  // So CG has suggested using 17 as font size but that looks a little odd on web
+  // 16 looks OK.
+  textStyle.fontSize = 16; 
+  textStyle.lineHeight = 24;
+  textStyle.color = (colorScheme === "dark" ? "#FFFFFF" : "#000000" );
 
-  if (link) {
-    const url = link?.href || link?.url || link?.attrs?.href;
-    return (
-      <Text
-        key={key}
-        style={[textStyle, styles.link]}
-        onPress={() => {
-          if (url) Linking.openURL(url).catch(() => {});
-        }}>
-        {text}
-      </Text>
-    );
-  }
+  // WebkitFontSmoothing: 'antialiased',
+  // MozOsxFontSmoothing: 'grayscale',
+  // textStyle.webkitFontSmoothing = 'antialiased';
+  // textStyle.mozOsxFontSmoothing = 'grayscale';
+  // Above made no difference to fuzziness on web.
+
+  // As per CG: Strapi’s <BlocksRenderer> is browser-native HTML text, so it will always look sharper than RNW <Text> on web.
+  // So for this tutorial, I will accept this fuzziness on web.
+
+  // if (link) {
+  //   const url = link?.href || link?.url || link?.attrs?.href;
+  //   return (
+  //     <Text
+  //       key={key}
+  //       style={[textStyle, styles.link]}
+  //       onPress={() => {
+  //         if (url) Linking.openURL(url).catch(() => {});
+  //       }}>
+  //       {text}
+  //     </Text>
+  //   );
+  // }
 
   return (
     <Text key={key} style={textStyle}>
@@ -72,113 +91,134 @@ const renderInline = (node: any, key: number | string) => {
 };
 
 /** Render a single block object */
-const renderBlock = (block: any, index: number) => {
+const renderBlock = (block: any, index: number, colorScheme: 'light' | 'dark') => {
   if (!block) return null;
+  const color = colorScheme === "dark" ? "#FFFFFF" : "#000000";
+
+  // NEW FIX: empty paragraph -> render as vertical spacer
+  if (
+    block.type === 'paragraph' &&
+    Array.isArray(block.children) &&
+    block.children.length === 1 &&
+    (block.children[0]?.text === '' || block.children[0]?.text == null)
+  ) {
+    return <View key={index} style={{ height: 18 }} />;
+  }
 
   // Case 1: Some Strapi blocks come as { type: 'paragraph', data: { text: '...' } }
   if (block.type === 'paragraph' && block.data?.text) {
     return (
-      <Text key={index} style={styles.paragraph}>
+      <Text key={index} 
+        style={[
+          styles.paragraph,
+          { color: color }
+        ]}
+      >
         {block.data.text}
       </Text>
     );
   }
 
   // Case 2: Prose mirror: { type: 'heading', attrs: { level: 2 }, content: [...] } or {type: 'heading', data: { level, text } }
-  if (block.type === 'heading' || block.type === 'heading-block') {
-    const level = block.data?.level ?? block.attrs?.level ?? (block?.level ?? 2);
-    const text =
-      block.data?.text ??
-      (Array.isArray(block.content) ? block.content.map((c: any) => c.text ?? '').join('') : block.text ?? '');
-    const style = level === 1 ? styles.heading1 : level === 2 ? styles.heading2 : styles.heading3;
-    return (
-      <Text key={index} style={style}>
-        {text}
-      </Text>
-    );
-  }
+  // if (block.type === 'heading' || block.type === 'heading-block') {
+  //   const level = block.data?.level ?? block.attrs?.level ?? (block?.level ?? 2);
+  //   const text =
+  //     block.data?.text ??
+  //     (Array.isArray(block.content) ? block.content.map((c: any) => c.text ?? '').join('') : block.text ?? '');
+  //   const style = level === 1 ? styles.heading1 : level === 2 ? styles.heading2 : styles.heading3;
+  //   return (
+  //     <Text key={index} style={style}>
+  //       {text}
+  //     </Text>
+  //   );
+  // }
 
   // Case 3: Paragraphs presented as content children (common AST-like shapes)
   if (block.type === 'paragraph' || block.nodeType === 'paragraph') {
     const children = block.content ?? block.children ?? block.data?.content;
     if (Array.isArray(children)) {
       return (
-        <Text key={index} style={styles.paragraph}>
-          {children.map((c: any, i: number) => renderInline(c, String(i)))}
+        <Text key={index} 
+          style={[
+            styles.paragraph,
+            { color: color }
+          ]}
+        >
+          {children.map((c: any, i: number) => renderInline(c, String(i), colorScheme))}
         </Text>
       );
     }
   }
 
   // Case 4: Lists — ordered/unordered
-  if (block.type === 'bullet_list' || block.type === 'ordered_list' || block.nodeType === 'list') {
-    const items = block.content ?? block.items ?? block.data?.items ?? [];
-    const ordered = block.type === 'ordered_list' || block.ordered;
-    return (
-      <View key={index} style={{ marginBottom: 8 }}>
-        {items.map((li: any, i: number) => {
-          const liChildren = li.content ?? li.children ?? li.data?.content ?? [];
-          const bullet = ordered ? `${i + 1}. ` : '\u2022 ';
-          const liText = Array.isArray(liChildren) ? liChildren.map((c: any) => c.text ?? '').join('') : liChildren?.text ?? '';
-          return (
-            <Text key={i} style={styles.listItem}>
-              {bullet}
-              <Text>{liText}</Text>
-            </Text>
-          );
-        })}
-      </View>
-    );
-  }
+  // if (block.type === 'bullet_list' || block.type === 'ordered_list' || block.nodeType === 'list') {
+  //   const items = block.content ?? block.items ?? block.data?.items ?? [];
+  //   const ordered = block.type === 'ordered_list' || block.ordered;
+  //   return (
+  //     <View key={index} style={{ marginBottom: 8 }}>
+  //       {items.map((li: any, i: number) => {
+  //         const liChildren = li.content ?? li.children ?? li.data?.content ?? [];
+  //         const bullet = ordered ? `${i + 1}. ` : '\u2022 ';
+  //         const liText = Array.isArray(liChildren) ? liChildren.map((c: any) => c.text ?? '').join('') : liChildren?.text ?? '';
+  //         return (
+  //           <Text key={i} style={styles.listItem}>
+  //             {bullet}
+  //             <Text>{liText}</Text>
+  //           </Text>
+  //         );
+  //       })}
+  //     </View>
+  //   );
+  // }
 
   // Case 5: Image blocks: many shapes exist. Try common fields.
-  if (block.type === 'image' || block.__component?.includes?.('image') || block.name === 'image') {
-    const url = block.data?.url ?? block.url ?? block.attributes?.url ?? block.image?.url ?? block.src;
-    const caption = block.data?.caption ?? block.caption ?? block.altText ?? block.attributes?.alternativeText;
-    if (url) {
-      return (
-        <View key={index} style={{ marginVertical: 8 }}>
-          <Image source={{ uri: url }} style={styles.image} />
-          {caption ? <Text style={{ fontSize: 12, color: '#666' }}>{caption}</Text> : null}
-        </View>
-      );
-    }
-  }
+  // if (block.type === 'image' || block.__component?.includes?.('image') || block.name === 'image') {
+  //   const url = block.data?.url ?? block.url ?? block.attributes?.url ?? block.image?.url ?? block.src;
+  //   const caption = block.data?.caption ?? block.caption ?? block.altText ?? block.attributes?.alternativeText;
+  //   if (url) {
+  //     return (
+  //       <View key={index} style={{ marginVertical: 8 }}>
+  //         <Image source={{ uri: url }} style={styles.image} />
+  //         {caption ? <Text style={{ fontSize: 12, color: '#666' }}>{caption}</Text> : null}
+  //       </View>
+  //     );
+  //   }
+  // }
 
   // Case 6: Quote
-  if (block.type === 'quote' || block.nodeType === 'blockquote' || block.__component?.includes?.('quote')) {
-    const text = block.data?.text ?? (Array.isArray(block.content) ? block.content.map((c: any) => c.text ?? '').join('') : block.text ?? '');
-    return (
-      <View key={index} style={styles.quote}>
-        <Text>{text}</Text>
-      </View>
-    );
-  }
+  // if (block.type === 'quote' || block.nodeType === 'blockquote' || block.__component?.includes?.('quote')) {
+  //   const text = block.data?.text ?? (Array.isArray(block.content) ? block.content.map((c: any) => c.text ?? '').join('') : block.text ?? '');
+  //   return (
+  //     <View key={index} style={styles.quote}>
+  //       <Text>{text}</Text>
+  //     </View>
+  //   );
+  // }
 
   // Case 7: Code block
-  if (block.type === 'code' || block.nodeType === 'code-block' || block.__component?.includes?.('code')) {
-    const code = block.data?.code ?? block.code ?? block.text ?? '';
-    return (
-      <View key={index}>
-        <Text style={styles.codeBlock}>{code}</Text>
-      </View>
-    );
-  }
+  // if (block.type === 'code' || block.nodeType === 'code-block' || block.__component?.includes?.('code')) {
+  //   const code = block.data?.code ?? block.code ?? block.text ?? '';
+  //   return (
+  //     <View key={index}>
+  //       <Text style={styles.codeBlock}>{code}</Text>
+  //     </View>
+  //   );
+  // }
 
   // Case 8: Generic content where block contains content array (walk children)
-  if (Array.isArray(block.content) && block.content.length > 0) {
-    return (
-      <Text key={index} style={styles.paragraph}>
-        {block.content.map((c: any, i: number) => renderInline(c, String(i)))}
-      </Text>
-    );
-  }
+  // if (Array.isArray(block.content) && block.content.length > 0) {
+  //   return (
+  //     <Text key={index} style={styles.paragraph}>
+  //       {block.content.map((c: any, i: number) => renderInline(c, String(i)))}
+  //     </Text>
+  //   );
+  // }
 
   // Unknown block fallback — helpful while developing
   return (
     <View key={index} style={styles.unknown}>
-      <Text>Unsupported block type - debugging output:</Text>
-      <Text style={{ fontSize: 12 }}>{JSON.stringify(block)}</Text>
+      <Text style={{ color: color }} >Unsupported block type - debugging output:</Text>
+      <Text style={{ fontSize: 12, color: color }}>{JSON.stringify(block)}</Text>
     </View>
   );
 };
@@ -191,6 +231,7 @@ export default function StrapiBlocksRenderer({
   colorScheme?: 'light' | 'dark';
 }) {
   if (!blockContent) return null;
+  const color = colorScheme === "dark" ? "#FFFFFF" : "#000000";
 
   // Some Strapi responses wrap blocks under data[0].attributes.blocks or similar.
   // Normalize: if top-level object has data/attributes, attempt to reach array.
@@ -207,8 +248,8 @@ export default function StrapiBlocksRenderer({
     // If it's not an array still, render debug
     return (
       <View style={[styles.container]}>
-        <Text>Unexpected blocks shape (debug):</Text>
-        <Text style={{ fontSize: 12 }}>{JSON.stringify(blocks)}</Text>
+        <Text style={{ color: color }} >Unexpected blocks shape (debug):</Text>
+        <Text style={{ fontSize: 12, color: color }}>{JSON.stringify(blocks)}</Text>
       </View>
     );
   }
@@ -216,7 +257,7 @@ export default function StrapiBlocksRenderer({
   return (
     <ScrollView contentContainerStyle={{ paddingVertical: 8 }}>
       <View style={[styles.container]}>
-        {blocks.map((b: any, i: number) => renderBlock(b, i))}
+        {blocks.map((b: any, i: number) => renderBlock(b, i, colorScheme))}
       </View>
     </ScrollView>
   );

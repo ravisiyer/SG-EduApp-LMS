@@ -209,9 +209,9 @@ if (!validLessonIndex) {
       <View className="flex-1 p-4 min-h-[100px]">
         {hasNotes ? (
           <>
-            <Text className="mt-2 text-black dark:text-white">
+            {/* <Text className="mt-2 text-black dark:text-white">
               {JSON.stringify(lesson.notes)}
-            </Text>
+            </Text> */}
             <StrapiBlocksRenderer  
               colorScheme={colorScheme}
               blockContent={lesson.notes} 
