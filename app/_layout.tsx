@@ -63,9 +63,13 @@ const InitialLayout = () => {
     }
   }, [isLoaded, isSignedIn, loaded]);
 
-  if (!isLoaded || !loaded) {
-    return <ActivityIndicator size="large" />;
-  }
+  // Below code is problematic as it attempts to render something before any Stack or slot is rendered
+  // on Root Layout, if I understood that issue correctly. The condition does not seem to happen at all
+  // due to which I did not face the problem. It surfaced when I was attempting to remove even flash of
+  // Login screen when I expanded the check. That resulted in an error in Android app
+  // if (!isLoaded || !loaded) {
+  //   return <ActivityIndicator size="large" />;
+  // }
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
