@@ -1,8 +1,7 @@
-import { View, Text, Pressable, ActivityIndicator, useWindowDimensions, Alert, ScrollView, useColorScheme, Platform, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable, ActivityIndicator, useWindowDimensions, Alert, useColorScheme, Platform } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { useQuery } from '@tanstack/react-query';
-// import RichtTextContent from '@/components/RichtTextContent';
 import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -86,61 +85,65 @@ const Page = () => {
   }
 
   const onStartCourse = async () => {
-  if (isProcessing) return;      // existing call still running
-  setIsProcessing(true);
+  alert("onStartCourse fired");
+  // console.log("onStartCourse called for course: ", course.title);
+  return; // Temporary return to prevent execution during testing
 
-  try {
-    if (hasCourse) {
-      router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
-    } else {
-      if (course.isPremium) {
-        // Below lines of code handle case of no Android or iOS app in RevenueCat
-        if (!productPackage) {
-          Alert.alert(
-            'Purchase not available',
-            `This course is not available for purchase on ${Platform.OS}`
-          );
-          setIsProcessing(false);
-          return;
-        }
-        // Code below has not been tested as I do not have Android or iOS app in RevenueCat
-        // But I made few changes from original tutorial code to keep it in sync with web version
-        const purchaseResult = await purchasePackage!(productPackage!);
-        if (purchaseResult.productIdentifier === course.revenuecatId) {
-          const result = await addUserToCourse(course.documentId.toString());
-          if (result) {
-            router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
+  // if (isProcessing) return;      // existing call still running
+  // setIsProcessing(true);
 
-            // Code below may have an issue if user closes the alert instead of 
-            // click on the 'Start now' button. The user will remain on this screen which will
-            // be odd. So I have added above code to simply take user to course overview directly.
-            // Alert.alert('Course purchased', 'You can now start the course', [
-            //   {
-            //     text: 'Start now',
-            //     onPress: () =>
-            //       router.replace(
-            //         `/(app)/(authenticated)/course/${slug}/overview/overview`
-            //       ),
-            //   },
-            // ]);
-          } else {
-            console.error(
-              "addUserToCourse failed for course.documentId: ",
-              course.documentId.toString()
-            );
-            Alert.alert("We could not add this course to your account. Please contact support.");
-          }
-        }
-      } else {
-        const result = await addUserToCourse(course.documentId.toString());
-        if (result) {
-          router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
-        }
-      }
-    }
-  } finally {
-    setIsProcessing(false);
-  }
+  // try {
+  //   if (hasCourse) {
+  //     router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
+  //   } else {
+  //     if (course.isPremium) {
+  //       // Below lines of code handle case of no Android or iOS app in RevenueCat
+  //       if (!productPackage) {
+  //         Alert.alert(
+  //           'Purchase not available',
+  //           `This course is not available for purchase on ${Platform.OS}`
+  //         );
+  //         setIsProcessing(false);
+  //         return;
+  //       }
+  //       // Code below has not been tested as I do not have Android or iOS app in RevenueCat
+  //       // But I made few changes from original tutorial code to keep it in sync with web version
+  //       const purchaseResult = await purchasePackage!(productPackage!);
+  //       if (purchaseResult.productIdentifier === course.revenuecatId) {
+  //         const result = await addUserToCourse(course.documentId.toString());
+  //         if (result) {
+  //           router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
+
+  //           // Code below may have an issue if user closes the alert instead of 
+  //           // click on the 'Start now' button. The user will remain on this screen which will
+  //           // be odd. So I have added above code to simply take user to course overview directly.
+  //           // Alert.alert('Course purchased', 'You can now start the course', [
+  //           //   {
+  //           //     text: 'Start now',
+  //           //     onPress: () =>
+  //           //       router.replace(
+  //           //         `/(app)/(authenticated)/course/${slug}/overview/overview`
+  //           //       ),
+  //           //   },
+  //           // ]);
+  //         } else {
+  //           console.error(
+  //             "addUserToCourse failed for course.documentId: ",
+  //             course.documentId.toString()
+  //           );
+  //           Alert.alert("We could not add this course to your account. Please contact support.");
+  //         }
+  //       }
+  //     } else {
+  //       const result = await addUserToCourse(course.documentId.toString());
+  //       if (result) {
+  //         router.replace(`/(app)/(authenticated)/course/${slug}/overview/overview`);
+  //       }
+  //     }
+  //   }
+  // } finally {
+  //   setIsProcessing(false);
+  // }
 };
 
   return (
@@ -154,7 +157,7 @@ const Page = () => {
       onScroll={scrollHandler}
       scrollEventThrottle={16}
       contentContainerStyle={{ flexGrow: 1 }}>
-      <View className="relative" style={{ height: HEADER_HEIGHT }}>
+      <View className="relative" style={{ height: HEADER_HEIGHT, pointerEvents: "none" }}>
         <Animated.Image
           source={{ uri: course.image }}
           className="absolute w-full object-cover"
@@ -204,7 +207,6 @@ const Page = () => {
           <StrapiBlocksRenderer
             blockContent={course.description}
             colorScheme={colorScheme}
-            // dom={{ matchContents: true, scrollEnabled: false }}
           />
         </View>
 

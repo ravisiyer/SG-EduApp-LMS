@@ -26,7 +26,6 @@ const Page = () => {
   };
 
   return (
-    // <View className="flex-1 bg-white p-4">
     <View className="flex-1 p-4">
       <ScrollView className="web:mx-auto">
         <View className="flex-row items-center mb-6">
@@ -53,7 +52,6 @@ const Page = () => {
         </View>
 
         <Button title="Sign Out" onPress={() => handleSignOut()} color="#FF3B30" />
-        {/* <Button title="Sign Out" onPress={() => signOut()} color="#FF3B30" /> */}
       </ScrollView>
     </View>
   );

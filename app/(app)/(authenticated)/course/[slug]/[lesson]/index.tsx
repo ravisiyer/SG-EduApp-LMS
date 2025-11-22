@@ -1,9 +1,8 @@
-import { View, ScrollView, Text, TouchableOpacity, ActivityIndicator, Platform, useColorScheme, useWindowDimensions } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity, Platform, useColorScheme, useWindowDimensions } from 'react-native';
 import { useLocalSearchParams, Stack, useRouter } from 'expo-router';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useStrapi } from '@/providers/StrapiProvider';
-// import RichtTextContent from '@/components/RichtTextContent';
 import { useEventListener } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import { Confetti, ConfettiMethods } from 'react-native-fast-confetti';
@@ -154,12 +153,17 @@ if (!validLessonIndex) {
   // }
 
   const onEndCourse = () => {
+    // 🛡️ Prevent useEffect from overwriting our 100% progress
+    externalNavigationRef.current = false;
+
     confettiRef.current?.restart();
     (async () => {
       await markLessonAsCompleted(lesson.documentId, lesson.course.documentId, 100);
       await queryClient.invalidateQueries({ queryKey: ['lessons', slug] });
     })();    
 
+    // mark that the next navigation is internal
+    externalNavigationRef .current = false;
     setTimeout(() => {
       router.replace(`/my-content`);
     }, Platform.OS === "web" ? 0 : 4000);
@@ -208,15 +212,10 @@ if (!validLessonIndex) {
 
       <View className="flex-1 p-4 min-h-[100px]">
         {hasNotes ? (
-          <>
-            {/* <Text className="mt-2 text-black dark:text-white">
-              {JSON.stringify(lesson.notes)}
-            </Text> */}
-            <StrapiBlocksRenderer  
-              colorScheme={colorScheme}
-              blockContent={lesson.notes} 
-            />
-          </>
+          <StrapiBlocksRenderer  
+            colorScheme={colorScheme}
+            blockContent={lesson.notes} 
+          />
         ) : (
           <Text className="text-center text-gray-500 dark:text-gray-400">
             No notes available for this lesson.

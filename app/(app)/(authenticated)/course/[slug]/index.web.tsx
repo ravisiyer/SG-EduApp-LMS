@@ -2,7 +2,6 @@ import { View, Text, Pressable, ActivityIndicator, useWindowDimensions, useColor
 import { useLocalSearchParams, router } from 'expo-router';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { useQuery } from '@tanstack/react-query';
-// import RichtTextContent from '@/components/RichtTextContent';
 import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,

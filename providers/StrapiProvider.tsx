@@ -312,6 +312,7 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
       const userCourse = await getUserCourses();
       const userCourseToUpdate = userCourse.find((course) => course.course.documentId === courseId);
       if (userCourseToUpdate) {
+        // console.log("Updating user course progress: progress =", progress, "nextLessonIndex =", nextLessonIndex);
         await updateUserCourseProgress(userCourseToUpdate.documentId, progress, nextLessonIndex);
       }
       await queryClient.invalidateQueries({ queryKey: ['userCourses'] });
