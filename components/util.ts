@@ -1,51 +1,54 @@
-import { useAuth, useUser } from '@clerk/clerk-expo';
-
-// Ideally speaking we should be able to differentiate between user
-// choosing a proper ClerkId (via Google SSO) or logging in as dummy.
-// Should enhance below code later.
+import { useAuth, useUser } from "@clerk/clerk-expo";
+import { useDummyAuth } from "@/providers/DummyAuthContext";
 
 export function useRealOrDummyClerkUser() {
-  const { user } = useUser();  
-  if (process.env.EXPO_PUBLIC_DUMMY_LOGIN_ID) {
+  const { user } = useUser();
+  const { dummyIsSignedIn } = useDummyAuth();
+
+  const dummyEnabled = Boolean(process.env.EXPO_PUBLIC_DUMMY_LOGIN_ID);
+
+  if (dummyEnabled && dummyIsSignedIn) {
     return {
-        id: process.env.EXPO_PUBLIC_DUMMY_LOGIN_ID,
-        imageUrl: "",
-        emailAddresses: [{emailAddress: "Dummy@dummy.com"}],
-        primaryEmailAddress: {emailAddress: "Dummy@dummy.com"},
-        createdAt: "1/1/2025"
-        // primaryEmailAddress?.emailAddress
-        // emailAddresses[0].emailAddress
-    }
-  } else {
-    return user;
+      id: process.env.EXPO_PUBLIC_DUMMY_LOGIN_ID,
+      imageUrl: "",
+      emailAddresses: [{ emailAddress: "mail@dummymail.com" }],
+      primaryEmailAddress: { emailAddress: "mail@dummymail.com" },
+      createdAt: "1/1/2025",
+    };
   }
+
+  return user;
 }
 
 export function useRealOrDummyIsSignedIn() {
   const { isSignedIn } = useAuth();
-  if (process.env.EXPO_PUBLIC_DUMMY_LOGIN_ID) {
-    return true;
-  }
-  return isSignedIn;
+  const { dummyIsSignedIn } = useDummyAuth();
+  const dummyEnabled = Boolean(process.env.EXPO_PUBLIC_DUMMY_LOGIN_ID);
+
+  return isSignedIn || (dummyEnabled && dummyIsSignedIn);
 }
 
 export function useRealOrDummyIsLoaded() {
   const { isLoaded } = useAuth();
-  if (process.env.EXPO_PUBLIC_DUMMY_LOGIN_ID) {
-    return true;
-  }
-  return isLoaded;
+  const { dummyIsSignedIn } = useDummyAuth();
+  const dummyEnabled = Boolean(process.env.EXPO_PUBLIC_DUMMY_LOGIN_ID);
+
+  // Loaded if Clerk loaded OR (dummy enabled and dummy signed in)
+  return isLoaded || (dummyEnabled && dummyIsSignedIn);
 }
 
 export function useRealOrDummyClerkSignOut() {
   const { signOut } = useAuth();
+  const { dummyIsSignedIn, dummySignOut } = useDummyAuth();
+  const dummyEnabled = Boolean(process.env.EXPO_PUBLIC_DUMMY_LOGIN_ID);
 
   async function doSignOut() {
-    if (process.env.EXPO_PUBLIC_DUMMY_LOGIN_ID) {
+    if (dummyEnabled && dummyIsSignedIn) {
+      dummySignOut();
       return Promise.resolve();
-    } else {
-      return signOut();
     }
+    return signOut();
   }
+
   return { signOut: doSignOut };
 }

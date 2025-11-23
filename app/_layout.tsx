@@ -15,6 +15,7 @@ import { useReactQueryDevTools } from '@dev-plugins/react-query';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useRealOrDummyIsLoaded, useRealOrDummyIsSignedIn } from "@/components/util";
+import { DummyAuthProvider } from "@/providers/DummyAuthContext";
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 if (!publishableKey) {
@@ -93,23 +94,25 @@ export default function RootLayout() {
       publishableKey={publishableKey}
       waitlistUrl="/soon"
       >
-      <SafeAreaProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <ClerkLoaded>
-            <QueryClientProvider client={queryClient}>
-              <StrapiProvider>
-                <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                  <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-                  {/* Safe area for top-level content */}
-                  <SafeAreaView style={{ flex: 1 }} edges={['bottom', 'left', 'right']}>
-                    <InitialLayout />
-                  </SafeAreaView>
-                </ThemeProvider>
-              </StrapiProvider>
-            </QueryClientProvider>
-          </ClerkLoaded>
-        </GestureHandlerRootView>
-      </SafeAreaProvider>
+      <DummyAuthProvider>
+        <SafeAreaProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <ClerkLoaded>
+              <QueryClientProvider client={queryClient}>
+                <StrapiProvider>
+                  <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                    <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+                    {/* Safe area for top-level content */}
+                    <SafeAreaView style={{ flex: 1 }} edges={['bottom', 'left', 'right']}>
+                      <InitialLayout />
+                    </SafeAreaView>
+                  </ThemeProvider>
+                </StrapiProvider>
+              </QueryClientProvider>
+            </ClerkLoaded>
+          </GestureHandlerRootView>
+        </SafeAreaProvider>
+      </DummyAuthProvider>  
     </ClerkProvider>
   )
 }

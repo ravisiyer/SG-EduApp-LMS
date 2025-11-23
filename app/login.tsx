@@ -5,12 +5,13 @@ import { useState } from 'react';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { randomUUID } from 'expo-crypto';
 import { router } from 'expo-router';
+import { useDummyAuth } from '@/providers/DummyAuthContext';
 
 export default function Index() {
   const [loading, setLoading] = useState(false);
   // const { startSSOFlow } = useSSO();
   const { createUser } = useStrapi();
-
+  const { dummySignIn } = useDummyAuth();
   // const handleSignInWithSSO = async (strategy: 'oauth_google' | 'oauth_apple') => {
   //   try {
   //     const { createdSessionId, setActive, signUp, signIn } = await startSSOFlow({ strategy });
@@ -54,6 +55,7 @@ export default function Index() {
   // };
 
   const handleDummySignIn = () => {
+    dummySignIn();
     console.log('Dummy SignIn clicked. router.replace will be executed.');
     router.replace('/(app)/(authenticated)/(tabs)');
   }
