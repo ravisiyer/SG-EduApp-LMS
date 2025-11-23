@@ -1,6 +1,7 @@
 import "@/global.css"
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { ClerkProvider, ClerkLoaded, useAuth } from '@clerk/clerk-expo';
+import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo';
+// import { ClerkProvider, ClerkLoaded, useAuth } from '@clerk/clerk-expo';
 import { tokenCache } from '@clerk/clerk-expo/token-cache'
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { ActivityIndicator, LogBox, useColorScheme } from 'react-native';
@@ -13,6 +14,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useReactQueryDevTools } from '@dev-plugins/react-query';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { useRealOrDummyIsLoaded, useRealOrDummyIsSignedIn } from "@/components/util";
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 if (!publishableKey) {
@@ -41,7 +43,9 @@ const InitialLayout = () => {
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
-  const { isLoaded, isSignedIn } = useAuth();
+  // const { isLoaded, isSignedIn } = useAuth();
+  const isLoaded = useRealOrDummyIsLoaded();
+  const isSignedIn = useRealOrDummyIsSignedIn();
   const router = useRouter();
   const segments = useSegments();
   useReactQueryDevTools(queryClient);

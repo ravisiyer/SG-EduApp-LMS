@@ -66,6 +66,7 @@ function AppHeader() {
 }
 
 export default function Layout() {
+  console.log('Rendering App Layout: (authenticated)');
   return (
     <View className="flex-1">
       <AppHeader />

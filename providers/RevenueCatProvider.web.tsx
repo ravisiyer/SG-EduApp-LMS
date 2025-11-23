@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import React from 'react';
 import { Purchases, Package, ErrorCode, PurchasesError } from '@revenuecat/purchases-js';
-import { useUser } from '@clerk/clerk-expo';
+// import { useUser } from '@clerk/clerk-expo';
 import { RevenueCatProps } from '@/providers/RevenueCat';
+import { useRealOrDummyClerkUser } from '@/components/util';
 
 // Use your RevenueCat API keys
 const APIKeys = {
@@ -15,7 +16,8 @@ export const RevenueCatProvider = ({ children }: any) => {
   const [webPackages, setWebPackages] = useState<Package[]>([]);
   const [isReady, setIsReady] = useState(false);
   const [isRevenueCatAPIKeyPresent, setIsRevenueCatAPIKeyPresent] = useState(false);
-  const { user: clerkUser } = useUser();
+  // const { user: clerkUser } = useUser();
+  const clerkUser = useRealOrDummyClerkUser();
 
   useEffect(() => {
     const init = async () => {

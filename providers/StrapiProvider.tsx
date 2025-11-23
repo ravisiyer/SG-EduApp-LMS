@@ -1,8 +1,9 @@
 import { Course, Lesson, HomeInfo, StrapiUser, UserCourses } from '@/types/interfaces';
 import { createContext, useContext, ReactNode } from 'react';
-import { useUser } from '@clerk/clerk-expo';
+// import { useUser } from '@clerk/clerk-expo';
 import { useQueryClient } from '@tanstack/react-query';
 import { Alert, Platform } from 'react-native';
+import { useRealOrDummyClerkUser } from '@/components/util';
 
 // Define the context type
 interface StrapiContextType {
@@ -47,7 +48,14 @@ export function StrapiProvider({ children }: { children: ReactNode }) {
   console.log(`Strapi backendMode: ${backendMode}`);
   console.log(`Strapi API URL: ${baseUrl}`);
 
-  const { user } = useUser();
+  // let user:any;
+  // if (process.env.EXPO_PUBLIC_DUMMY_LOGIN_ID) {
+  //   user = process.env.EXPO_PUBLIC_DUMMY_LOGIN_ID
+  // } else {
+  //   user = useUser().user;
+  // }
+  // const { user } = useUser();  
+  const user = useRealOrDummyClerkUser();
   const queryClient = useQueryClient();
 
   const createUser = async (user: StrapiUser): Promise<StrapiUser> => {

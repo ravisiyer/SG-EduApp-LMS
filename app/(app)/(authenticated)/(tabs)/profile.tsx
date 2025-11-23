@@ -1,12 +1,16 @@
 import { View, Text, Button, Image, ScrollView } from 'react-native';
-import { useAuth } from '@clerk/clerk-expo';
-import { useUser } from '@clerk/clerk-expo';
+// import { useAuth } from '@clerk/clerk-expo';
+// import { useUser } from '@clerk/clerk-expo';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useStrapi } from '@/providers/StrapiProvider';
+import { useRealOrDummyClerkUser, useRealOrDummyClerkSignOut } from '@/components/util';
 
 const Page = () => {
-  const { signOut } = useAuth();
-  const { user } = useUser();
+  // const { signOut } = useAuth();
+  // const { user } = useUser();
+  const user = useRealOrDummyClerkUser();
+  const { signOut } = useRealOrDummyClerkSignOut();
+
   const { getUserCourses, getUserCompletedLessons } = useStrapi();
   const queryClient = useQueryClient();
 
