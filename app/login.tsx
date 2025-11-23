@@ -56,8 +56,6 @@ export default function Index() {
 
   const handleDummySignIn = () => {
     dummySignIn();
-    console.log('Dummy SignIn clicked. router.replace will be executed.');
-    router.replace('/(app)/(authenticated)/(tabs)');
   }
 
   return (

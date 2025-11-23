@@ -13,7 +13,7 @@ export function useRealOrDummyClerkUser() {
       imageUrl: "",
       emailAddresses: [{ emailAddress: "mail@dummymail.com" }],
       primaryEmailAddress: { emailAddress: "mail@dummymail.com" },
-      createdAt: "1/1/2025",
+      createdAt: "2025-01-01",
     };
   }
 
