@@ -100,7 +100,7 @@ export default function Index() {
               className="w-full flex-row justify-center items-center bg-white py-3 rounded-lg hover:cursor-pointer hover:bg-gray-800 duration-300"
               onPress={() => handleDummySignIn()}
               >
-              <Ionicons name="logo-google" size={24} color="black" className="mr-2" />
+              <Ionicons name="log-in-outline" size={24} color="black" className="mr-2" />
               <Text className="text-black text-center font-semibold ml-2">
                 Use dummy SignIn (bypasses Clerk Auth) 
               </Text>
