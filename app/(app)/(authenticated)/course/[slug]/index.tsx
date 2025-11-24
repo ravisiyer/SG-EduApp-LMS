@@ -158,7 +158,7 @@ const Page = () => {
       onScroll={scrollHandler}
       scrollEventThrottle={16}
       contentContainerStyle={{ flexGrow: 1 }}>
-      <View className="relative" style={{ height: HEADER_HEIGHT, pointerEvents: "none" }}>
+      <View pointerEvents="none" className="relative" style={{ height: HEADER_HEIGHT}}>
         <Animated.Image
           source={{ uri: course.image }}
           className="absolute w-full object-cover"
