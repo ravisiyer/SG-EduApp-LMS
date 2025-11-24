@@ -92,6 +92,7 @@ const Page = () => {
 
       await queryClient.invalidateQueries({ queryKey: ['lessons', slug] });
       await queryClient.invalidateQueries({ queryKey: ['userCourses'] });
+      await queryClient.invalidateQueries({ queryKey: ['userCompletedLessons'] });
     })();    
 
     // If there isn't a next lesson, simply stay on same lesson. This is a bug fix.
@@ -160,6 +161,7 @@ if (!validLessonIndex) {
     (async () => {
       await markLessonAsCompleted(lesson.documentId, lesson.course.documentId, 100);
       await queryClient.invalidateQueries({ queryKey: ['lessons', slug] });
+      await queryClient.invalidateQueries({ queryKey: ['userCompletedLessons'] });
     })();    
 
     // mark that the next navigation is internal

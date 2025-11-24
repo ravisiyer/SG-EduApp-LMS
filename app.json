@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "lms",
-    "slug": "sg-eduapp-lms",
+    "name": "lms-d",
+    "slug": "sg-eduapp-lms-d",
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "sg-ravisiyer-lms",
+    "scheme": "sg-ravisiyer-lms-d",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,
     "ios": {
@@ -14,10 +14,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/adaptive-icon-d.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ravisiyer.lms",
+      "package": "com.ravisiyer.lmsd",
       "userInterfaceStyle": "automatic"
     },
     "web": {
