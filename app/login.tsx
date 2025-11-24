@@ -1,10 +1,9 @@
-import { Text, View, Pressable, ActivityIndicator, Image } from 'react-native';
+import { Text, View, Pressable, ActivityIndicator, Image, Alert, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { useSSO } from '@clerk/clerk-expo';
 import { useStrapi } from '@/providers/StrapiProvider';
 import { randomUUID } from 'expo-crypto';
-import { router } from 'expo-router';
 import { useDummyAuth } from '@/providers/DummyAuthContext';
 
 export default function Index() {
@@ -55,8 +54,32 @@ export default function Index() {
   };
 
   const handleDummySignIn = () => {
-    dummySignIn();
-  }
+    // console.log("handleDummySignIn method entered");
+
+    const msg =
+      "This Dummy Login feature was added on top of the original tutorial. " +
+      "The tutorial was not designed for multiple people to use the same login at the same time.\n\n" +
+      "Because Dummy Login uses a single shared Dummy Login ID, the app may behave oddly if many users use it simultaneously.\n\n" +
+      "A more reliable version of the app without Dummy Login is available separately, but it requires Google SSO login.";
+
+    if (Platform.OS === "web") {
+      // Web fallback
+      const proceed = window.confirm(msg);
+      // const proceed = window.confirm(msg.replace(/\n\n/g, "\n"));
+      if (proceed) dummySignIn();
+      return;
+    }
+
+    // Mobile Alert
+    Alert.alert(
+      "Dummy Login Notice",
+      msg,
+      [
+        { text: "Proceed", onPress: () => dummySignIn() },
+        { text: "Cancel", style: "cancel" }
+      ]
+    );
+  };
 
   return (
     <View className="flex-1 bg-[#132134] justify-center">
@@ -76,14 +99,6 @@ export default function Index() {
           <Text className="text-3xl font-bold text-white mb-2">Your journey starts here</Text>
 
           <View className="w-full gap-4 px-4">
-            {/* <Pressable
-              className="w-full flex-row justify-center items-center bg-white py-3 rounded-lg hover:cursor-pointer hover:bg-gray-800 duration-300"
-              onPress={() => handleSignInWithSSO('oauth_apple')}
-              >
-              <Ionicons name="logo-apple" size={24} color="black" className="mr-2" />
-              <Text className="text-black text-center font-semibold ml-2">Continue with Apple</Text>
-            </Pressable> */}
-
             <Pressable
               className="w-full flex-row justify-center items-center bg-white py-3 rounded-lg hover:cursor-pointer hover:bg-gray-800 duration-300"
               onPress={() => handleSignInWithSSO('oauth_google')}
@@ -96,11 +111,11 @@ export default function Index() {
 
             <Pressable
               className="w-full flex-row justify-center items-center bg-white py-3 rounded-lg hover:cursor-pointer hover:bg-gray-800 duration-300"
-              onPress={() => handleDummySignIn()}
+              onPress={handleDummySignIn}
               >
               <Ionicons name="log-in-outline" size={24} color="black" className="mr-2" />
               <Text className="text-black text-center font-semibold ml-2">
-                Use dummy SignIn (bypasses Clerk Auth) 
+                Use Dummy Login (Google SSO not needed) 
               </Text>
             </Pressable>
           </View>
