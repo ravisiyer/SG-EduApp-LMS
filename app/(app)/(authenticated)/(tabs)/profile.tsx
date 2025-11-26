@@ -33,7 +33,17 @@ const Page = () => {
     <View className="flex-1 p-4">
       <ScrollView className="web:mx-auto">
         <View className="flex-row items-center mb-6">
-          <Image source={{ uri: user?.imageUrl }} className="w-20 h-20 rounded-full mr-4" />
+          {/* <Image source={{ uri: user?.imageUrl }} className="w-20 h-20 rounded-full mr-4" /> */}
+          <Image
+            source={
+              user?.imageUrl
+                ? { uri: user.imageUrl }
+                : require("@/assets/images/icon.png")
+            }
+            style={{ width: 80, height: 80 }}
+            className="rounded-full mr-4"
+            resizeMode="contain"
+          />
           <View className="flex-1">
             <Text className="text-md font-bold dark:text-white mb-1">
               {user?.primaryEmailAddress?.emailAddress}
