@@ -44,9 +44,9 @@ The modified tutorial app's Android version is shared as an APK and the web vers
 
 I am using Strapi cloud free tier for hosting the API backend whose runtime behavior is 'Cold start'. This causes the first Strapi data request for both the web app and Android app to often take as long as around a minute to complete. Subsequent requests don't take so long. In a production app whose API backend is hosted on paid Strapi cloud or AWS/Azure, the runtime behaviour would be 'Always on' and so even the first Strapi data request will complete quickly.
 
-Modified tutorial [Android release APK on Google Drive](https://drive.google.com/file/d/1puPB7eKHJJ8BAlmaXd5ItDYPUo2EGmCY/view?usp=drive_link) (124 MB).  
+Modified tutorial [Android release APK on Google Drive](https://drive.google.com/file/d/19xWMtXUqgZ7tY-ZX7qBojCGvzBgiUBh5/view?usp=drive_link) (115 MB, v20251124).  
 
-- This release APK has been scanned using VirusTotal. [The scan reported the APK file to be clean](https://www.virustotal.com/gui/file/b4d905b89943847cad75ba5a719fc40eeed31666f7aae0dbe1e042ccf2348342) i.e. "No security vendors flagged this file as malicious".
+- This release APK has been scanned using VirusTotal. [The scan reported the APK file to be clean](https://www.virustotal.com/gui/file/2c10f2fc256d46e27fe73d93b409401daf22471106ce215693338cb9b4423870) i.e. "No security vendors flagged this file as malicious".
 
 - I tested it both on my Android mobile and on Android emulator on my PC (downloaded APK from above link on emulator).  
 
@@ -63,4 +63,4 @@ The app does have some relatively minor issues, but as the app is a tutorial app
 These minor issues usually get fixed by closing and reopening the Android app or refreshing the web page. The open issues I have noticed are put up in my post: [Open Issues of Interesting (SG) React Native Education (LMS) tutorial app (mobile and web) with public repos but not open source](https://raviswdev.blogspot.com/2025/11/open-issues-of-interesting-sg-react.html).
 
 ## Tutorial App Notes Posts
-As notes for myself—and perhaps helpful to others—I have published several posts on the tutorial app. The latest post is [Notes on learning stage of developing my own React Native education app using Expo Framework - Part 6](https://raviswdev.blogspot.com/2025/11/notes-on-learning-stage-of-developing.html). These posts link to their previous and next posts.
+As notes for myself—and perhaps helpful to others—I have published several posts on the tutorial app. The latest post is [Notes on learning stage of developing my own React Native education app using Expo Framework - Part 7](https://raviswdev.blogspot.com/2025/11/notes-on-learning-stage-of-developing_22.html). These posts link to their previous and next posts.
